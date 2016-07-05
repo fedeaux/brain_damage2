@@ -10,7 +10,7 @@ module BrainDamage
   class ResourceGenerator < Rails::Generators::ModelGenerator
     include Rails::Generators::ModelHelpers
     include Rails::Generators::ResourceHelpers
-    # include BrainDamage::ResourceHelpers
+    include BrainDamage::ResourceHelpers
 
     source_root File.expand_path('../templates', __FILE__)
 

@@ -6,6 +6,8 @@ module BrainDamage
 
     def initialize(resource, options = {})
       @template_file = 'controller.rb'
+      @public_methods_templates = "#{dir}/templates/methods/*"
+
       @set_member_before_action_list = [:show, :edit, :update, :destroy]
       super
     end
@@ -21,6 +23,13 @@ module BrainDamage
     def extract_definitions
       if @controller_code
       end
+    end
+
+    def public_methods
+      Dir[@public_methods_templates].map { |template_file|
+        # method_name = template_file.split('/').last.gsub('.rb', '')
+        render_erb_file template_file
+      }.join("\n\n").indent(1)[2..-1]
     end
 
     def attribute_white_list

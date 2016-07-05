@@ -47,5 +47,9 @@ module BrainDamage
         self.send(:capture, *args, &block)
       end
     end
+
+    def template_hook(arg)
+      ''
+    end
   end
 end
