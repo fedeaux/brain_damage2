@@ -1,0 +1,20 @@
+- <%= singular_table_name %> ||= @<%= singular_table_name %>
+
+.brain-damage-show-inline-display
+  .brain-damage-actions-wrapper
+    .brain-damage-actions
+      = link_to <%= singular_table_name %> do
+        %i.eye.icon
+
+      %a
+        %i.brain-damage-edit.edit.icon
+
+      = link_to <%= singular_table_name %>, :method => :delete, :remote => true, :data => { :confirm => t('actions.confirm_delete') }, :class => 'brain-damage-delete' do
+        %i.trash.icon
+
+  = r "<%= plural_table_name %>/fields.show.inline", <%= singular_table_name %>: <%= singular_table_name %>
+
+.brain-damage-show-inline-form
+  = r "<%= plural_table_name %>/form", <%= singular_table_name %>: <%= singular_table_name %>, cancel_button: true
+
+.ui.divider

@@ -1,0 +1,21 @@
+- table_form_id = bd_id 'single-page-manager-table-form'
+- <%= singular_table_name %> ||= @<%= singular_table_name %>
+
+- @single_page_manager_options ||= Hash.new(false)
+- @single_page_manager_options[:cancel_button] = true
+
+%tbody
+  %tr{id: table_form_id}
+    - if @single_page_manager_options[:explicit_form]
+      %td.brain-damage-hideable-content.brain-damage-add-form-wrapper
+        = r '<%= plural_table_name %>/form', <%= singular_table_name %>: <%= singular_table_name %>
+
+    - else
+      %td.brain-damage-show{colspan: 99}
+        .ui.basic.small.button.brain-damage-show= cet 'actions.add'
+
+      %td.brain-damage-hideable-content.brain-damage-add-form-wrapper{ colspan: 99, style: 'display: none' }
+        = r '<%= plural_table_name %>/form', <%= singular_table_name %>: <%= singular_table_name %>
+
+      :javascript
+        new BrainDamage.TrailingForm("##{table_form_id}")

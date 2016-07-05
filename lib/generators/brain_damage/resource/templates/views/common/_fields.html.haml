@@ -1,0 +1,11 @@
+- prefix ||= '<%= singular_table_name %>'
+
+- if f.object.id
+  = f.hidden_field :id, {name: name_for_input_tag(:id, prefix)}
+
+<% for field in all_fields -%>
+<% input_html = input_for field -%>
+<% if input_html -%>
+<%= input_html %>
+<% end -%>
+<% end -%>

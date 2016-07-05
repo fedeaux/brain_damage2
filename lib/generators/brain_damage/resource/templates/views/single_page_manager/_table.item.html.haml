@@ -1,0 +1,32 @@
+- <%= singular_table_name %> ||= @<%= singular_table_name %>
+
+- if defined?(single_page_manager_options)
+  - @single_page_manager_options = JSON.parse(single_page_manager_options).symbolize_keys
+
+- else
+  - @single_page_manager_options ||= Hash.new false
+
+- @single_page_manager_options[:nested_on] = nested_on if defined? nested_on
+
+%tbody.brain-damage-list-item-wrapper
+  %tr.brain-damage-list-item{ data: { item: { id: <%= singular_table_name %>.id }}}
+    = r '<%= plural_table_name %>/table.item.show', <%= singular_table_name %>: <%= singular_table_name %>
+
+    %td.brain-damage-actions-wrapper
+      .brain-damage-actions
+        - if @single_page_manager_options[:viewable]
+          = link_to <%= singular_table_name %> do
+            %i.eye.icon
+
+        - if <%= @resource.views_schema.editable_guard %>
+          %a
+            %i.brain-damage-edit.edit.icon
+
+        - if <%= @resource.views_schema.deletable_guard %>
+          = link_to <%= singular_table_name %>, method: :delete, remote: true, data: { confirm: t('actions.confirm_delete') }, class: 'brain-damage-delete' do
+            %i.trash.icon
+
+  - if <%= @resource.views_schema.editable_guard %>
+    %tr.brain-damage-edit-list-item{ data: { item: { for: <%= singular_table_name %>.id }}}
+      %td{ colspan: <%= attributes.length + 2 -%> }
+        = r '<%= plural_table_name %>/table.item.form', <%= singular_table_name %>: <%= singular_table_name %>

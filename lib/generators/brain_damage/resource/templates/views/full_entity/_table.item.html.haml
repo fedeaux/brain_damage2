@@ -1,0 +1,8 @@
+- <%= singular_table_name %> ||= @<%= singular_table_name %>
+
+%tbody.brain-damage-list-item-wrapper
+  %tr.brain-damage-list-item{ :data => { :item => { :id => <%= singular_table_name %>.id }}}
+<% for attribute in list_attributes -%>
+<% display_html = @resource.display_attribute(attribute, enclosing_haml: '%td') -%>
+<%= display_html.indent 2 if display_html %>
+<% end -%>

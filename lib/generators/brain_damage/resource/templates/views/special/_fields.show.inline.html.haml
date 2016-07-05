@@ -1,0 +1,10 @@
+- <%= singular_table_name %> ||= @<%= singular_table_name %>
+
+<% for field in all_fields -%>
+<% display_html = @resource.display_attribute(field) -%>
+<% if display_html -%>
+%b= "#{cet('<%= "#{singular_table_name}.#{field.name}" %>')}:"
+<%= display_html %>
+%br
+<% end -%>
+<% end -%>

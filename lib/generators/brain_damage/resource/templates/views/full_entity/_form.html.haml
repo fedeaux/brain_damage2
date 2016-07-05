@@ -1,0 +1,13 @@
+- cancel_button ||= false
+- <%= singular_table_name %> ||= @<%= singular_table_name %> || <%= name %>.new
+
+= form_for <%= singular_table_name %>, html: { class: 'ui form' }, validate: true do |f|
+  = r '<%= plural_table_name %>/fields', <%= singular_table_name %>: <%= singular_table_name %>, f: f
+
+  .ui.divider
+
+  .actions
+    = f.submit cet('actions.save'), class: 'ui primary button'
+
+    - if cancel_button
+      .ui.basic.button.brain-damage-cancel= cet('actions.cancel')

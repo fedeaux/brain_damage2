@@ -1,0 +1,13 @@
+- <%= singular_table_name %> ||= @<%= singular_table_name %>
+- nested_on ||= @single_page_manager_options[:nested_on]
+
+<% if @resource.views_schema.options[:item_type] == :columns -%>
+
+<% for attribute in list_attributes -%>
+<% display_html = @resource.display_attribute(attribute, enclosing_haml: '%td') %>
+<%= display_html if display_html %>
+<% end -%>
+
+<% elsif @resource.views_schema.options[:item_type] == :inline -%>
+%td= r "<%= plural_table_name %>/fields.show.inline", <%= singular_table_name %>: <%= singular_table_name %>
+<% end -%>

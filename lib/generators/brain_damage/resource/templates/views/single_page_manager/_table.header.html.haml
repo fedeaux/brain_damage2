@@ -1,0 +1,12 @@
+- nested_on ||= @single_page_manager_options[:nested_on]
+
+%thead
+<% if @resource.views_schema.options[:item_type] == :columns %>
+  %tr
+<% for attribute in list_attributes -%>
+<% inner_html = "\#{cet('#{singular_table_name}.#{attribute.name}')}" %>
+<% html = @resource.display_attribute(attribute, indentation: 2, enclosing_haml: '%th', inner_html: inner_html) %>
+<%= html if html %>
+<% end -%>
+    %th
+<% end -%>

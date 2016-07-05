@@ -1,0 +1,17 @@
+- single_page_manager_id = bd_id 'single-page-manager'
+- <%= plural_table_name %> ||= @<%= plural_table_name %>
+
+- @single_page_manager_options ||= Hash.new(false)
+- @single_page_manager_options[:single_page_manager_script_duplicate_guard] = true
+
+.ui.two.column.stackable.grid.brain-damage-single-page-manager{ :id => single_page_manager_id }
+  .column
+    = r 'table', <%= plural_table_name %>: <%= plural_table_name %>
+
+  .column.brain-damage-add-form-wrapper
+    .ui.segment
+      - @single_page_manager_options[:cancel_button] = false
+      = r "form"
+
+  :javascript
+    new BrainDamage.SinglePageManager("##{single_page_manager_id}");

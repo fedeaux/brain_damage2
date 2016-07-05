@@ -1,0 +1,5 @@
+- <%= plural_table_name %> ||= @<%= plural_table_name %>
+
+%table.ui.table.brain-damage-table.brain-damage-list
+  = r "<%= plural_table_name %>/table.header"
+  = r '<%= plural_table_name %>/index.body', <%= plural_table_name %>: <%= plural_table_name %>

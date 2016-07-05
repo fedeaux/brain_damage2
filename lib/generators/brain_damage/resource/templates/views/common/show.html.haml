@@ -1,0 +1,11 @@
+- <%= singular_table_name %> ||= @<%= singular_table_name %>
+
+.ui.segment
+<% for field in all_fields -%>
+<% display_html = @resource.display_attribute(field) -%>
+<% if display_html -%>
+  .paragraph
+    %b= "#{cet('<%= "#{singular_table_name}.#{field.name}" %>')}:"
+<%= display_html.gsub(/^/, '  ' * 2) %>
+<% end -%>
+<% end -%>

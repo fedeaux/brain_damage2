@@ -1,0 +1,12 @@
+- id = "foreign-inline-trailing-ajax-form-#{bd_id}"
+
+%div{ :id => id }
+  - <%= singular_table_name %>_prototype ||= Link.new
+  .brain-damage-hideable-content{ :style => 'display: none' }
+    = r "<%= plural_table_name %>/form", <%= singular_table_name %>: <%= singular_table_name %>_prototype
+
+  .brain-damage-show
+    .ui.basic.small.button.brain-damage-show= cet('actions.add')
+
+  :coffeescript
+    new BrainDamage.TrailingForm "##{id}"

@@ -1,0 +1,16 @@
+.ui.grid
+  .ten.wide.column
+    %h1.ui.header
+      = "#{cet('<%= "entities.#{plural_table_name}" %>')}"
+
+  .six.wide.column
+    .float-right
+      = link_to new_<%= singular_table_name %>_path, class: 'ui primary tiny icon button' do
+        %i.add.icon
+        = "#{cet('actions.new')} #{cet('<%= "entities.#{singular_table_name}" %>')}"
+
+<%= template_hook 'before index.body' %>
+
+= r '<%= plural_table_name %>/index', <%= plural_table_name %>: @<%= plural_table_name %>
+
+<%= template_hook 'after index.body' -%>

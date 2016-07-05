@@ -1,0 +1,4 @@
+- @single_page_manager_options ||= <%= options_hash.inspect %>
+
+%h1.ui.header= "#{ct('<%= "entities.#{plural_table_name}" %>')}"
+= render 'single_page_manager', trailing_form: true

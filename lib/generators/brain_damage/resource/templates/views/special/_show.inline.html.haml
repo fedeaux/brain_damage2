@@ -1,0 +1,10 @@
+- id = "brain-damage-show-inline-wrapper-#{bd_id}"
+
+.brain-damage-show-inline-wrapper{ id: id }
+  = r "<%= plural_table_name %>/inner.show.inline", <%= singular_table_name %>: <%= singular_table_name %>, cancel_button: true
+
+  :coffeescript
+    new BrainDamage.InlineEdit "##{id}",
+      display_selector: ".brain-damage-show-inline-display"
+      edition_selector: ".brain-damage-show-inline-form"
+      partial_to_show: "inner.show.inline"
