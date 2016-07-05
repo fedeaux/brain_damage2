@@ -42,6 +42,11 @@ module BrainDamage
       @resource.setup self
     end
 
+    def generate_controller
+      mas_que = File.join('app/controllers', controller_class_path, "#{controller_file_name}_controller.rb")
+      create_file(mas_que) { @resource.controller.generate(mas_que) }
+    end
+
     protected
     def self.get_resource_description(args)
       initializers = [get_helpers_file, get_description_file_from_args(args)].reject(&:nil?)
