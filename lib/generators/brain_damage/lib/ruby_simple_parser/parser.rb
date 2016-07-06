@@ -31,6 +31,8 @@ module RubySimpleParser
         code_line = @code_lines[line_number]
         line_class = classify_line code_line
 
+        code_line.strip! if line_class == EMPTY
+
         if line_class == PUBLIC_METHOD_START
           @parsed_code[line_number] = Method.new code_line, :public
           @context = @parsed_code[line_number]

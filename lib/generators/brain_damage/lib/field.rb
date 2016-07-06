@@ -22,7 +22,13 @@ module BrainDamage
       add_input :default, options
     end
 
-    def describe_relation(type, options)
+    def invisible
+      display = nil
+      input = nil
+      attr_white_list = ''
+    end
+
+    def describe_relation(type, options = {})
       # Relation::Factory.build type, options
     end
 

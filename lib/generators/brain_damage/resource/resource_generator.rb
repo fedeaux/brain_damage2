@@ -14,7 +14,7 @@ module BrainDamage
 
     source_root File.expand_path('../templates', __FILE__)
 
-    class_option :description, desc: "The .rb file with description for this scaffold"
+    class_option :description, desc: "The .rb file with description for this resource"
 
     class << self
       attr_accessor :resource
@@ -95,7 +95,7 @@ module BrainDamage
     end
 
     def self.has_already_added_route?
-      File.read(Rails.root+'config/routes.rb').include? "resources :#{resource.name.downcase.pluralize}"
+      File.read(Rails.root+'config/routes.rb').include? "resources :#{resource.name.pluralize.underscore}"
     end
 
     def handler

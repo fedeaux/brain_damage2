@@ -1,5 +1,6 @@
 require 'erb'
 require 'erubis'
+require_relative '../ruby_simple_parser/parser'
 
 module BrainDamage
   module Templateable

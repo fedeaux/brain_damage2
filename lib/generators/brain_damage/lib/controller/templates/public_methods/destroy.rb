@@ -4,7 +4,7 @@ def destroy
 
   respond_to do |format|
     format.json {
-      render :nothing => true, :status => 200
+      render nothing: true, status: 200
     }
 
     format.html {
