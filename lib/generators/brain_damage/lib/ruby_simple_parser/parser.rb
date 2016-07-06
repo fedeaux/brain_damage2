@@ -1,5 +1,6 @@
 require_relative 'method'
 require_relative 'code_line'
+require_relative 'class_definition'
 
 module RubySimpleParser
   class Parser
@@ -9,10 +10,13 @@ module RubySimpleParser
     PRIVATE_METHOD_START = :private_method_start
     PRIVATE_METHOD_END = :private_method_end
 
+    CLASS_START = :class_start
+
     COMMENT = :comment
     EMPTY = :empty
     OTHER = :other
 
+    attr_reader :class_definition
     attr_reader :public_methods
     attr_reader :private_methods
 
@@ -57,8 +61,13 @@ module RubySimpleParser
             end
           end
 
+        elsif line_class == CLASS_START
+          @parsed_code[line_number] = ClassDefinition.new code_line
+          @class_definition = @parsed_code[line_number]
+
         elsif @context and @context.respond_to? :add_line
           @context.add_line code_line
+
         else
           @parsed_code[line_number] = CodeLine.new code_line
         end
@@ -83,11 +92,12 @@ module RubySimpleParser
       elsif code_line =~ /^\s*#/
         COMMENT
 
-      elsif code_line =~ /^\s*#/
-        COMMENT
+      elsif code_line =~ /^\s*class\*/
+        CLASS_START
 
       elsif code_line.strip == ''
         EMPTY
+
       else
         OTHER
       end
