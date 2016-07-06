@@ -47,6 +47,18 @@ module BrainDamage
       create_file(mas_que) { @resource.controller.generate(mas_que) }
     end
 
+    def improve_migration_code
+      return if @ignore_migration
+      file_name = @resource.migration.migration_file_full_path
+
+      return unless file_name and File.exists? file_name
+      file_contents = File.read file_name
+
+      File.open(file_name, 'w+') do |f|
+        f.write @resource.migration.improve_code file_contents
+      end
+    end
+
     protected
     def self.get_resource_description(args)
       initializers = [get_helpers_file, get_description_file_from_args(args)].reject(&:nil?)
