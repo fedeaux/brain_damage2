@@ -34,6 +34,8 @@ module BrainDamage
 
       hook_for :resource_route, required: true, in: :rails unless self.has_already_added_route?
 
+      model_file_name = File.join('app/models', "#{@resource.name.underscore.downcase}.rb")
+      resource.model.setup model_file_name
       super
     end
 
@@ -48,8 +50,7 @@ module BrainDamage
     end
 
     def generate_model
-      file_name = File.join('app/models', "#{@resource.name.underscore.downcase}.rb")
-      create_file(file_name) { @resource.model.generate(file_name) }
+      create_file(@resource.model.model_file_name) { @resource.model.generate }
     end
 
     def improve_migration_code
