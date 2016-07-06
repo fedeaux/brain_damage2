@@ -18,9 +18,10 @@ module RubySimpleParser
     OTHER = :other
 
     attr_reader :class_definition
-    attr_reader :leading_class_method_calls
     attr_reader :private_methods
     attr_reader :public_methods
+
+    attr_accessor :leading_class_method_calls
 
     def initialize(code)
       @code_lines = code.split("\n")
