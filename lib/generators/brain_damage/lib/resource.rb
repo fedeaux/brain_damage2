@@ -9,6 +9,7 @@ module BrainDamage
     attr_reader :columns
     attr_reader :controller
     attr_reader :fields
+    attr_reader :model
     attr_reader :migration
     attr_reader :parametizer
 
@@ -19,6 +20,7 @@ module BrainDamage
       @parametizer = BrainDamage::Parametizer.new self
       @migration = BrainDamage::Migration.new self
       @controller = BrainDamage::ControllerGenerator.new self
+      @model = BrainDamage::ModelGenerator.new self
 
       initializers.each do |initializer|
         instance_eval initializer.read, initializer.path if initializer.is_a? File

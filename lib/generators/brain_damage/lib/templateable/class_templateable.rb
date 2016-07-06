@@ -49,6 +49,10 @@ module BrainDamage
       def extract_definitions
         @parser = RubySimpleParser::Parser.new @current_code if @current_code
       end
+
+      def class_definition
+        @parser.class_definition.print if @parser
+      end
     end
   end
 end

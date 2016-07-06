@@ -43,8 +43,13 @@ module BrainDamage
     end
 
     def generate_controller
-      mas_que = File.join('app/controllers', controller_class_path, "#{controller_file_name}_controller.rb")
-      create_file(mas_que) { @resource.controller.generate(mas_que) }
+      file_name = File.join('app/controllers', controller_class_path, "#{controller_file_name}_controller.rb")
+      create_file(file_name) { @resource.controller.generate(file_name) }
+    end
+
+    def generate_model
+      file_name = File.join('app/models', "#{@resource.name.underscore.downcase}.rb")
+      create_file(file_name) { @resource.model.generate(file_name) }
     end
 
     def improve_migration_code

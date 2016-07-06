@@ -92,7 +92,7 @@ module RubySimpleParser
       elsif code_line =~ /^\s*#/
         COMMENT
 
-      elsif code_line =~ /^\s*class\*/
+      elsif code_line =~ /^\s*class\s*/
         CLASS_START
 
       elsif code_line.strip == ''
