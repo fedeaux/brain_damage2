@@ -11,14 +11,16 @@ module RubySimpleParser
     PRIVATE_METHOD_END = :private_method_end
 
     CLASS_START = :class_start
+    CLASS_METHOD_CALL = :class_method_call
 
     COMMENT = :comment
     EMPTY = :empty
     OTHER = :other
 
     attr_reader :class_definition
-    attr_reader :public_methods
+    attr_reader :leading_class_method_calls
     attr_reader :private_methods
+    attr_reader :public_methods
 
     def initialize(code)
       @code_lines = code.split("\n")
@@ -27,6 +29,7 @@ module RubySimpleParser
 
       @public_methods = {}
       @private_methods = {}
+      @leading_class_method_calls = []
       parse
     end
 
@@ -64,12 +67,17 @@ module RubySimpleParser
         elsif line_class == CLASS_START
           @parsed_code[line_number] = ClassDefinition.new code_line
           @class_definition = @parsed_code[line_number]
+          @context = @class_definition
 
         elsif @context and @context.respond_to? :add_line
           @context.add_line code_line
 
         else
           @parsed_code[line_number] = CodeLine.new code_line
+
+          if @context.is_a? ClassDefinition and line_class == CLASS_METHOD_CALL
+            @leading_class_method_calls << @parsed_code[line_number]
+          end
         end
       end
 
@@ -91,6 +99,9 @@ module RubySimpleParser
 
       elsif code_line =~ /^\s*#/
         COMMENT
+
+      elsif code_line =~ /^  \w+/
+        CLASS_METHOD_CALL
 
       elsif code_line =~ /^\s*class\s*/
         CLASS_START

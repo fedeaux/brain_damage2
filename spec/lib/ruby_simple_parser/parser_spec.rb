@@ -39,8 +39,17 @@ describe RubySimpleParser::Parser do
       expect(subject.classify_line('      ')).to eq RubySimpleParser::Parser::EMPTY
     end
 
-    it 'everything else is other' do
-      expect(subject.classify_line('class ContactsController < ApplicationController')).to eq RubySimpleParser::Parser::OTHER
+    it 'classifies class definitions' do
+      expect(subject.classify_line('class ContactsController < ApplicationController')).to eq RubySimpleParser::Parser::CLASS_START
+    end
+
+    it 'classifies class method class' do
+      expect(subject.classify_line('  before_save :alface')).to eq RubySimpleParser::Parser::CLASS_METHOD_CALL
+      expect(subject.classify_line('  include Autocompletable')).to eq RubySimpleParser::Parser::CLASS_METHOD_CALL
+      expect(subject.classify_line('  set_before_filter :alface, only: [:queijo] ')).to eq RubySimpleParser::Parser::CLASS_METHOD_CALL
+    end
+
+    it 'classifies everything else as other' do
       expect(subject.classify_line('        if @contact.errors.empty?')).to eq RubySimpleParser::Parser::OTHER
     end
   end
@@ -48,31 +57,8 @@ describe RubySimpleParser::Parser do
   describe '.parse' do
     it 'parses a well formatted rb file' do
       parser = RubySimpleParser::Parser.new File.read 'spec/lib/ruby_simple_parser/examples/controller.rb'
-      expect(parser.public_methods[:update].print).to eq %(  def update
-    @contact.assign_attributes contact_params
-
-    @contact.save
-
-    respond_to do |format|
-      format.json {
-        partial = params[:partial_to_show] ? params[:partial_to_show] : 'table.item'
-        render json: { html: render_to_string( partial: partial, formats: [:html], locals: get_partial_locals ),
-                          errors: @contact.errors }
-      }
-
-      format.html {
-        if @contact.errors.empty?
-          redirect_to @contact, notice: t('common.updated').capitalize
-        else
-          if params[:request_source]
-            render params[:request_source]
-          else
-            render :edit
-          end
-        end
-      }
-    end
-  end)
+      expect(parser.public_methods[:update].print).to eq File.read('spec/lib/ruby_simple_parser/examples/update.rb').chomp
+      expect(parser.leading_class_method_calls.map(&:print).first).to eq "  before_action :set_contact, only: [:show, :edit, :update, :destroy]"
     end
   end
 
