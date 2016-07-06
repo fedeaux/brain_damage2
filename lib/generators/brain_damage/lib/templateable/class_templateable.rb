@@ -23,7 +23,11 @@ module BrainDamage
       end
 
       def leading_class_method_calls
-        ''
+        if @parser
+          @parser.leading_class_method_calls.map(&:print).join("\n")
+        else
+          ''
+        end
       end
 
       def methods(visibility)
@@ -43,7 +47,7 @@ module BrainDamage
           end
         end
 
-        definitions.values.join("\n\n")[(identation*2)..-1]
+        definitions.values.join("\n\n")
       end
 
       def extract_definitions

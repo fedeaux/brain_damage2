@@ -49,9 +49,11 @@ module RubySimpleParser
           @context = @parsed_code[line_number]
 
         elsif line_class == PUBLIC_METHOD_END
-          @context.add_line code_line
-          @public_methods[@context.name] = @context
-          @context = nil
+          if @context and @context.is_a? Method
+            @context.add_line code_line
+            @public_methods[@context.name] = @context
+            @context = nil
+          end
 
         elsif line_class == PRIVATE_METHOD_END
           if @context and @context.is_a? Method

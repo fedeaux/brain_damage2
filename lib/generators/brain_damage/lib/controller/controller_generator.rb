@@ -17,7 +17,7 @@ module BrainDamage
     end
 
     def leading_class_method_calls
-      render_erb_string 'before_action :set_<%= singular_table_name %>, only: <%= set_member_before_action_list.inspect %>'
+      render_erb_string('before_action :set_<%= singular_table_name %>, only: <%= set_member_before_action_list.inspect %>').indent
     end
 
     def attribute_white_list

@@ -13,9 +13,6 @@ module BrainDamage
       super
     end
 
-    # def leading_class_method_calls
-    # end
-
     def attribute_white_list
       @resource.fields.values.map(&:attr_white_list).reject(&:nil?).join ', '
     end
