@@ -33,6 +33,11 @@ module BrainDamage
       @generator = generator
     end
 
+    def column_relation_type(column_name)
+      return @columns[column_name][:type] if @columns[column_name] and Relation.is_valid_relation? @columns[column_name][:type]
+      nil
+    end
+
     def columns=(column_hash)
       column_hash.each do |name, options|
         if options.is_a? Symbol

@@ -1,8 +1,9 @@
 require_relative 'field_white_list'
+require_relative 'relation/base'
 
 module BrainDamage
   class Field
-    attr_accessor :relation
+    attr_reader :relation
     attr_writer :attr_white_list
     attr_reader :name
 
@@ -28,8 +29,8 @@ module BrainDamage
       attr_white_list = ''
     end
 
-    def describe_relation(type, options = {})
-      # Relation::Factory.build type, options
+    def relation= (options)
+      @relation = Relation.create (@resource.column_relation_type(@name) || options[:type]), options
     end
 
     def add_display(identifier, options)

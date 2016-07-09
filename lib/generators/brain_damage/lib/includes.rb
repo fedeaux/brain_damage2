@@ -1,3 +1,9 @@
+require_relative 'relation/base'
+require_relative 'relation/belongs_to'
+require_relative 'relation/has_and_belongs_to_many'
+require_relative 'relation/has_many'
+require_relative 'relation/has_one'
+
 require_relative 'parametizer'
 require_relative 'migration'
 require_relative 'field'
