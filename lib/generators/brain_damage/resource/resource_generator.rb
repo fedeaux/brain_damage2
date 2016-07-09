@@ -67,13 +67,13 @@ module BrainDamage
 
     protected
     def self.get_resource_description(args)
-      initializers = [get_helpers_file, get_description_file_from_args(args)].reject(&:nil?)
+      initializers = [get_base_file, get_description_file_from_args(args)].reject(&:nil?)
       BrainDamage::Resource.new initializers
     end
 
-    def self.get_helpers_file
-      helpers_file = Rails.root+'desc/helpers.rb'
-      return File.open helpers_file if File.exists? helpers_file
+    def self.get_base_file
+      base_file = Rails.root+'desc/base.rb'
+      return File.open base_file if File.exists? base_file
     end
 
     def self.get_description_file_from_args(args)

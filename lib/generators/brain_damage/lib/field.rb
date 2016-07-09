@@ -1,3 +1,4 @@
+# coding: utf-8
 require_relative 'field_white_list'
 require_relative 'relation/base'
 
@@ -30,6 +31,8 @@ module BrainDamage
     end
 
     def relation= (options)
+      options = { type: options } if options.is_a? Symbol
+      options[:field] = self
       @relation = Relation.create (@resource.column_relation_type(@name) || options[:type]), options
     end
 
@@ -39,6 +42,12 @@ module BrainDamage
 
     def add_input(identifier, options)
       @inputs[identifier] = options
+    end
+
+    def model_lines
+      return @relation.model_lines if @relation
+
+      []
     end
 
     def attr_white_list

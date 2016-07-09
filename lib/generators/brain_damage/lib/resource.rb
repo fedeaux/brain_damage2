@@ -56,6 +56,10 @@ module BrainDamage
     def describe_field(name)
       @fields[name] = Field.new(name: name, resource: self)
       yield @fields[name] if block_given?
+
+      unless @fields[name].relation
+        @fields[name].relation = {}
+      end
     end
 
     def ensure_every_column_is_described

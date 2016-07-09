@@ -24,7 +24,7 @@ module BrainDamage
 
       def leading_class_method_calls
         if @parser
-          @parser.leading_class_method_calls.map(&:print).join("\n")
+          @parser.leading_class_method_calls.map(&:print).uniq.join("\n")
         else
           ''
         end
