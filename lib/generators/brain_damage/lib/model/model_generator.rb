@@ -10,7 +10,56 @@ module BrainDamage
     def generate
       improve_belongs_to_lines
       add_lines_from_fields
+      prettify_lines
       super
+    end
+
+    def prettify_lines
+      return if @parser.leading_class_method_calls.empty?
+
+      infos = @parser.leading_class_method_calls.map { |line|
+        code = line.print.strip
+
+        order = if code.starts_with? 'include'
+                  0
+                elsif code.strip[0, 3].upcase == code.strip[0, 3]
+                  1
+                elsif code.starts_with? 'default_scope'
+                  2
+                elsif code.starts_with? 'scope :'
+                  3
+                elsif code.starts_with? 'validates '
+                  4
+                elsif code =~ /^(has_many)|(has_and_bel)|(belongs_to)/
+                  5
+                elsif code.starts_with? 'accepts_nested_attributes_for'
+                  6
+                elsif code.starts_with? 'validates_associated'
+                  7
+                else
+                  8
+                end
+
+        { code: code, line: line, order: order }
+
+      }.sort { |info_a, info_b|
+        order = info_a[:order] <=> info_b[:order]
+        if order != 0 then order else info_a[:code] <=> info_b[:code] end
+      }
+
+      @parser.leading_class_method_calls = []
+      current_info = infos.first
+      new_line_number = 0
+
+      infos.each do |info|
+        if info[:order] != current_info[:order]
+          @parser.leading_class_method_calls << RubySimpleParser::CodeLine.new("NEW_LINE_#{new_line_number}")
+          new_line_number += 1
+          current_info = info
+        end
+
+        @parser.leading_class_method_calls << info[:line]
+      end
     end
 
     def attribute_white_list
