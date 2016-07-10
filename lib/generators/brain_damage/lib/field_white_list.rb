@@ -13,7 +13,8 @@ module BrainDamage
         return ":#{@white_list.to_s}"
       end
 
-      # return @field.relation.white_list if @field.relation
+      return @field.relation.white_list if @field.relation
+
       return ":#{@field.name}"
     end
   end

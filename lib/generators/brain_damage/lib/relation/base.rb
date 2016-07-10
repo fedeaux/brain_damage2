@@ -29,5 +29,9 @@ module BrainDamage
       return nil unless Relation.is_valid_relation? type
       "BrainDamage::#{type.to_s.camelize}".constantize.new options
     end
+
+    def white_list
+      nil
+    end
   end
 end

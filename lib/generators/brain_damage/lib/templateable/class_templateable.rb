@@ -3,10 +3,18 @@ require_relative 'base'
 module BrainDamage
   module Templateable
     class ClassTemplateable < Templateable::Base
+      attr_reader :current_file_name
+
       def initialize(resource, options = {})
         super
         @public_methods_templates = "#{dir}/templates/public_methods/*"
         @private_methods_templates = "#{dir}/templates/private_methods/*"
+
+        @removed_methods = []
+      end
+
+      def remove_methods(*methods)
+        @removed_methods += methods
       end
 
       def public_methods
@@ -17,8 +25,13 @@ module BrainDamage
         methods :private
       end
 
-      def generate(file_name)
+      def setup(file_name)
+        @current_file_name = file_name
+        @current_code = File.read @current_file_name if File.exists? @current_file_name
         extract_definitions
+      end
+
+      def generate
         render
       end
 
@@ -38,7 +51,7 @@ module BrainDamage
         Dir[instance_variable_get("@#{visibility}_methods_templates")].map { |template_file|
           method_code = render_erb_file(template_file).indent identation
           method_name = RubySimpleParser::Method.extract_method_name method_code
-          definitions[method_name] = method_code
+          definitions[method_name] = method_code unless @removed_methods.include? method_name
         }
 
         if @parser
@@ -51,7 +64,11 @@ module BrainDamage
       end
 
       def extract_definitions
-        @parser = RubySimpleParser::Parser.new @current_code if @current_code
+        if @current_code
+          @parser = RubySimpleParser::Parser.new @current_code
+        else
+          @parser = RubySimpleParser::Parser.new
+        end
       end
 
       def class_definition

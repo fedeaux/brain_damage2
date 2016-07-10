@@ -25,9 +25,9 @@ module BrainDamage
     end
 
     def invisible
-      display = nil
-      input = nil
-      attr_white_list = ''
+      self.display = nil
+      self.input = nil
+      self.attr_white_list = ''
     end
 
     def relation= (options)

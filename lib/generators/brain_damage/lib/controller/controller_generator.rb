@@ -10,18 +10,27 @@ module BrainDamage
       super
     end
 
-    def generate(controller_file_name)
-      @controller_file_name = controller_file_name
-      @current_code = File.read @controller_file_name if File.exists? @controller_file_name
-      super
+    def generate
+      add_before_filters
+      render
     end
 
-    def leading_class_method_calls
-      render_erb_string('before_action :set_<%= singular_table_name %>, only: <%= set_member_before_action_list.inspect %>').indent
+    def add_before_filters
+      @parser.leading_class_method_calls << RubySimpleParser::CodeLine.new(render_erb_string('before_action :set_<%= singular_table_name %>, only: <%= set_member_before_action_list.inspect %>').indent)
     end
 
     def attribute_white_list
-      @resource.fields.values.map(&:attr_white_list).reject(&:nil?).join ', '
+      @resource.fields.values.map(&:attr_white_list).reject(&:nil?).sort { |field_a, field_b|
+        is_hash_a = (field_a.index '=>') || 0
+        is_hash_b = (field_b.index '=>') || 0
+
+        if is_hash_a == is_hash_b
+          field_a <=> field_b
+        else
+          is_hash_a <=> is_hash_b
+        end
+
+      }.join(', ')
     end
 
     private

@@ -23,7 +23,7 @@ module RubySimpleParser
 
     attr_accessor :leading_class_method_calls
 
-    def initialize(code)
+    def initialize(code = '')
       @code_lines = code.split("\n")
       @parsed_code = {}
       @context = nil

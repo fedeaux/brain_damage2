@@ -62,6 +62,14 @@ module BrainDamage
       end
     end
 
+    def describe_controller
+      yield @controller if block_given?
+    end
+
+    def describe_model
+      yield @model if block_given?
+    end
+
     def ensure_every_column_is_described
       (@columns.keys - @fields.keys).each do |column_name|
         describe_field column_name do |field|
