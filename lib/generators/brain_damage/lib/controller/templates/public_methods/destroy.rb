@@ -1,4 +1,3 @@
-# DELETE <%= route_url %>/1
 def destroy
   @<%= orm_instance.destroy %>
 

@@ -1,4 +1,3 @@
-# PATCH/PUT <%= route_url %>/1
 def update
   @<%= orm_instance.name %>.assign_attributes <%= singular_table_name %>_params
 <%= template_hook('before controller/update/save').indent 1 %>

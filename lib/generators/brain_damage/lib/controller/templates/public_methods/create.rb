@@ -1,4 +1,3 @@
-# POST <%= route_url %>
 def create
   @<%= singular_table_name %> = <%= orm_class.build(class_name, "#{singular_table_name}_params") %>
 <%= template_hook('after controller/create/save').indent 1 %>
