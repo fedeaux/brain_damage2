@@ -1,8 +1,10 @@
 module RubySimpleParser
   class CodeLine
     attr_accessor :line
+    attr_reader :parent
 
-    def initialize(line)
+    def initialize(line, parent)
+      @parent = parent
       @line = line
     end
 

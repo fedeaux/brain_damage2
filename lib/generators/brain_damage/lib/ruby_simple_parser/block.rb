@@ -1,6 +1,7 @@
 module RubySimpleParser
   class Block
-    def initialize(definition)
+    def initialize(definition, parent = nil)
+      @parent = parent
       @lines = [definition]
     end
 

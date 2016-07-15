@@ -39,6 +39,7 @@ describe RubySimpleParser::Parser do
       expect(subject.classify_line('  return true if @contact.errors.empty?')).to eq RubySimpleParser::Parser::CODE_WITHOUT_BLOCK
       expect(subject.classify_line('alfaces.map(&:queijo)')).to eq RubySimpleParser::Parser::CODE_WITHOUT_BLOCK
       expect(subject.classify_line('alfaces.map{ |queijo| queijo.goiabada }')).to eq RubySimpleParser::Parser::CODE_WITHOUT_BLOCK
+      expect(subject.classify_line('        ifolia @contact.errors.empty?')).to eq RubySimpleParser::Parser::CODE_WITHOUT_BLOCK
     end
 
     it 'classifies code with block' do
@@ -50,17 +51,34 @@ describe RubySimpleParser::Parser do
       expect(subject.classify_line('alfaces.map{ |queijo|')).to eq RubySimpleParser::Parser::CODE_WITH_BLOCK
     end
 
+    it 'classifies block ending' do
+      expect(subject.classify_line('end')).to eq RubySimpleParser::Parser::BLOCK_END
+      expect(subject.classify_line('    end')).to eq RubySimpleParser::Parser::BLOCK_END
+      expect(subject.classify_line('    }')).to eq RubySimpleParser::Parser::BLOCK_END
+      expect(subject.classify_line('end.map()')).to eq RubySimpleParser::Parser::BLOCK_END
+      expect(subject.classify_line('end.map{ |alface| alface.queijo }')).to eq RubySimpleParser::Parser::BLOCK_END
+      expect(subject.classify_line('}.map{ |alface| alface.queijo }')).to eq RubySimpleParser::Parser::BLOCK_END
+    end
+
+    it 'classifies block swaping as other' do
+      expect(subject.classify_line('end.map {')).to eq RubySimpleParser::Parser::BLOCK_SWAP
+      expect(subject.classify_line('}.map {')).to eq RubySimpleParser::Parser::BLOCK_SWAP
+      expect(subject.classify_line('}.select { |something| ')).to eq RubySimpleParser::Parser::BLOCK_SWAP
+    end
+
     it 'classifies everything else as other' do
     end
   end
 
-#   describe '.parse' do
-#     it 'parses a well formatted rb file' do
-#       parser = RubySimpleParser::Parser.new File.read 'spec/lib/ruby_simple_parser/examples/controller.rb'
-#       expect(parser.public_methods[:update].print).to eq File.read('spec/lib/ruby_simple_parser/examples/update.rb').chomp
-#       expect(parser.leading_class_method_calls.map(&:print).first).to eq "  before_action :set_contact, only: [:show, :edit, :update, :destroy]"
-#     end
-#   end
+  describe '.parse' do
+    it 'parses a well formatted rb file' do
+      parser = RubySimpleParser::Parser.new File.read 'spec/lib/ruby_simple_parser/examples/controller.rb'
+      parser.parse
+  #     expect(parser.public_methods[:update].print).to eq File.read('spec/lib/ruby_simple_parser/examples/update.rb').chomp
+  #     expect(parser.leading_class_method_calls.map(&:print).first).to eq "  before_action :set_contact, only: [:show, :edit, :update, :destroy]"
+  #   end
+    end
+  end
 
 #   describe '.print' do
 #     it 'prints the original code' do

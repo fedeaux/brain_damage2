@@ -5,13 +5,22 @@ require_relative 'class_definition'
 
 module RubySimpleParser
   class Parser
-    METHOD_START = :method_start
+    CLASS_START = 'ClassDefinition'
+    METHOD_START = 'Method'
+    CODE_WITH_BLOCK = 'Block'
+
     COMMENT = :comment
-    CLASS_START = :class_start
-    CODE_WITH_BLOCK = :class_code_with_block
     CODE_WITHOUT_BLOCK = :class_code_without_block
     EMPTY = :empty
     OTHER = :other
+    BLOCK_END = :block_end
+    BLOCK_SWAP = :block_swap
+
+    BLOCK_SPANNING_CONSTRUCTS = ['if', 'unless', 'each', 'while', 'until', 'for', 'begin', 'do', '{']
+
+    def block_spanning_constructs_regex
+      Regexp.new BLOCK_SPANNING_CONSTRUCTS.join('|')
+    end
 
     def initialize(code = '')
       @code = code
@@ -20,11 +29,26 @@ module RubySimpleParser
     def parse
       prepare_to_parse
       @code_lines.each_index do |line_number|
-        line_class = classify_line code_line
+        line_code = @code_lines[line_number]
+        line_class = classify_line line_code
+
+        if [CLASS_START, CODE_WITH_BLOCK].include? line_class
+          @parsed_code[line_number] = eval("RubySimpleParser::#{line_class}").new line_code, @context
+          @context = @parsed_code[line_number]
+
+        elsif line_class == METHOD_START
+          @parsed_code[line_number] = RubySimpleParser::Method.new line_code, :public, @context
+          @context = @parsed_code[line_number]
+
+        else
+          @parsed_code[line_number] = RubySimpleParser::CodeLine.new @parsed_code[line_number], @context
+        end
       end
     end
 
     def classify_line(code_line)
+      code_line.strip!
+
       if code_line =~ /def (self\.)?\w+/
         METHOD_START
 
@@ -34,13 +58,19 @@ module RubySimpleParser
       elsif code_line =~ /^\s*class\s*/
         CLASS_START
 
-      elsif code_line =~ /(?!.*end\s*$)\w+.*(\{|\bdo\b)[^}]*$/
+      elsif code_line =~ /^(end|\})/
+        res = code_line.gsub(/^(end|\})/, '') =~ /(?!.*end\s*$)\w+.*(\{)[^}]*$/
+
+        if code_line.gsub(/^(end|\})/, '') =~ /(?!.*end\s*$)\w+.*(\{)[^}]*$/
+          BLOCK_SWAP
+        else
+          BLOCK_END
+        end
+
+      elsif code_line =~ /(?!.*end\s*$)\w+.*(\{|\bdo\b)[^}]*$/ or code_line =~ /(?!.*end\s*$)^\s*\b(?:#{block_spanning_constructs_regex})\b[^}]*$/
         CODE_WITH_BLOCK
 
-      elsif code_line =~ /(?!.*end\s*$)^\s*(if|unless|each|while|until|for|begin)[^}]*$/
-        CODE_WITH_BLOCK
-
-      elsif code_line.strip == ''
+      elsif code_line == ''
         EMPTY
 
       else
@@ -54,7 +84,7 @@ module RubySimpleParser
 
     private
     def prepare_to_parse
-      @code_lines = code.split("\n")
+      @code_lines = @code.split("\n")
       @parsed_code = {}
       @context = nil
       @class_method_call_scope = nil

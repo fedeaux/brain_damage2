@@ -3,8 +3,8 @@ module RubySimpleParser
     METHOD_REGEX = /def\s+(?<method_name>(self\.)?\w+[?!]?)/
     attr_reader :name
 
-    def initialize(definition, visibility)
-      super definition
+    def initialize(definition, visibility, parent = nil)
+      super definition, parent
       @visibility = visibility
       @name = Method.extract_method_name definition
     end

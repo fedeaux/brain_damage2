@@ -1,6 +1,7 @@
 module RubySimpleParser
-  class ClassDefinition
-    def initialize(line)
+  class ClassDefinition < Block
+    def initialize(line, parent)
+      super line, parent
       @line = line
     end
 
