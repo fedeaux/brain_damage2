@@ -1,20 +1,12 @@
 module RubySimpleParser
-  class Method
+  class Method < Block
     METHOD_REGEX = /def\s+(?<method_name>(self\.)?\w+[?!]?)/
     attr_reader :name
 
     def initialize(definition, visibility)
-      @lines = [definition]
+      super definition
       @visibility = visibility
       @name = Method.extract_method_name definition
-    end
-
-    def add_line(line)
-      @lines << line
-    end
-
-    def print
-      @lines.join "\n"
     end
 
     def private?
