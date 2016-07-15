@@ -10,6 +10,8 @@ module BrainDamage
       if @options[:white_list]
         if @options[:white_list] == ''
           return nil
+        elsif @options[:white_list].is_a? Array
+          return @options[:white_list].map { |field| ":#{field}" }.join ', '
         else
           return @options[:white_list].inspect
         end

@@ -13,7 +13,7 @@ module BrainDamage
 
     def relationship_line
       line = "has_many :#{@name}".indent
-      add_options_to_line line, @options.slice(:class_name, :join_table, :as, :dependent, :foreign_key)
+      add_options_to_line line, @options.slice(:class_name, :join_table, :as, :dependent, :foreign_key, :through)
     end
 
     def nested_attributes_line

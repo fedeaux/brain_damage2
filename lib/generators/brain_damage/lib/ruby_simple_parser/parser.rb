@@ -88,13 +88,13 @@ module RubySimpleParser
     end
 
     def classify_line(code_line)
-      if code_line =~ /^  def \w+/
+      if code_line =~ /^  def (self\.)?\w+/
         PUBLIC_METHOD_START
 
       elsif code_line =~ /^  end/
         PUBLIC_METHOD_END
 
-      elsif code_line =~ /^    def \w+/
+      elsif code_line =~ /^    def (self\.)?\w+/
         PRIVATE_METHOD_START
 
       elsif code_line =~ /^    end/

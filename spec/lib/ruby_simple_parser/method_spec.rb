@@ -7,6 +7,7 @@ describe RubySimpleParser::Method do
       expect(RubySimpleParser::Method.new('def alface', :public).name).to eq :alface
       expect(RubySimpleParser::Method.new('def alface_crespa?', :public).name).to eq :alface_crespa?
       expect(RubySimpleParser::Method.new('def alface_crespa?(scope, goiabada: nil)', :public).name).to eq :alface_crespa?
+      expect(RubySimpleParser::Method.new('def self.test?(scope, goiabada: nil)', :public).name).to eq :"self.test?"
     end
   end
 

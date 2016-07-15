@@ -1,6 +1,6 @@
 module RubySimpleParser
   class Method
-    METHOD_REGEX = /def\s+(?<method_name>\w+[?!]?)/
+    METHOD_REGEX = /def\s+(?<method_name>(self\.)?\w+[?!]?)/
     attr_reader :name
 
     def initialize(definition, visibility)
