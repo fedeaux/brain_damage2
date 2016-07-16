@@ -1,12 +1,15 @@
 module RubySimpleParser
   class ClassDefinition < Block
-    def initialize(line, parent)
-      super line, parent
-      @line = line
+    CLASS_REGEX = /class\s+(?<class_name>\w+)/
+
+    def initialize(definition, visibility, parent = nil)
+      super definition, parent
+      @visibility = visibility
+      @name = ClassDefinition.extract_class_name definition
     end
 
-    def print
-      @line
+    def self.extract_class_name(code)
+      (code.match CLASS_REGEX)[:class_name].to_sym
     end
   end
 end

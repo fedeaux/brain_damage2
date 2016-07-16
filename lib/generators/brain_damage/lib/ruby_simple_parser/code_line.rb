@@ -6,6 +6,7 @@ module RubySimpleParser
     def initialize(line, parent)
       @parent = parent
       @line = line
+      @parent.add_line self
     end
 
     def print
