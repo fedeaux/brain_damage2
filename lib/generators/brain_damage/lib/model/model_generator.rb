@@ -23,21 +23,25 @@ module BrainDamage
         order = if code.starts_with? 'include'
                   0
                 elsif code.strip[0, 3].upcase == code.strip[0, 3]
-                  1
+                  unless ['[', '{'].include? code.split("\n").first[-1]
+                    1
+                  else
+                    2
+                  end
                 elsif code.starts_with? 'default_scope'
-                  2
-                elsif code.starts_with? 'scope :'
                   3
-                elsif code.starts_with? 'validates '
+                elsif code.starts_with? 'scope :'
                   4
-                elsif code =~ /^(has_many)|(has_and_bel)|(belongs_to)/
+                elsif code.starts_with? 'validates '
                   5
-                elsif code.starts_with? 'accepts_nested_attributes_for'
+                elsif code =~ /^(has_many)|(has_and_bel)|(belongs_to)/
                   6
-                elsif code.starts_with? 'validates_associated'
+                elsif code.starts_with? 'accepts_nested_attributes_for'
                   7
-                else
+                elsif code.starts_with? 'validates_associated'
                   8
+                else
+                  9
                 end
 
         { code: code, line: line, order: order }
@@ -76,6 +80,8 @@ module BrainDamage
       }.map { |pair|
         [pair.first, add_options_to_belongs_to_line(pair.second) ]
       }.each { |pair|
+        puts pair.inspect unless @parser.class_method_calls[:after_class_definition][pair.first].respond_to? :line
+
         @parser.class_method_calls[:after_class_definition][pair.first].line = pair.second
       }
     end

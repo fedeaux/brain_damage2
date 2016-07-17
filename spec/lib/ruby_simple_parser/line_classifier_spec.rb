@@ -96,7 +96,6 @@ describe RubySimpleParser::LineClassifier do
       expect(subject.classify('  before_save :dominion')).to eq RubySimpleParser::CODE_WITHOUT_BLOCK
       expect(subject.classify('  include Autocompletable')).to eq RubySimpleParser::CODE_WITHOUT_BLOCK
       expect(subject.classify('  set_before_filter :alface, only: [:queijo] ')).to eq RubySimpleParser::CODE_WITHOUT_BLOCK
-      expect(subject.classify('  return true if @contact.errors.empty?')).to eq RubySimpleParser::CODE_WITHOUT_BLOCK
       expect(subject.classify('alfaces.map(&:queijo)')).to eq RubySimpleParser::CODE_WITHOUT_BLOCK
       expect(subject.classify('alfaces.map{ |queijo| queijo.goiabada }')).to eq RubySimpleParser::CODE_WITHOUT_BLOCK
       expect(subject.classify('        ifolia @contact.errors.empty?')).to eq RubySimpleParser::CODE_WITHOUT_BLOCK
@@ -104,12 +103,20 @@ describe RubySimpleParser::LineClassifier do
       expect(subject.classify("    Document::BILL_OF_SERVICE => 'Nota Fiscal do Serviço',"))
         .to eq RubySimpleParser::CODE_WITHOUT_BLOCK
 
+      expect(subject.classify("  validates :evolved_to_1_by, {:presence => true, :if => \"is_above? 0\"}"))
+        .to eq RubySimpleParser::CODE_WITHOUT_BLOCK
+
       expect(subject.classify("doc.validity = attributes['validade'] if attributes['validade']"))
         .to eq RubySimpleParser::CODE_WITHOUT_BLOCK
 
-      expect(subject.classify("doc.archive = attributes[:archive] unless attributes[:archive].blank?"))
+      expect(subject.classify('  return true if @contact.errors.empty?')).to eq RubySimpleParser::CODE_WITHOUT_BLOCK
+      expect(subject.classify('  return if @contact.errors.empty?')).to eq RubySimpleParser::CODE_WITHOUT_BLOCK
+
+      expect(subject.classify('  return if @contact.errors.empty? then "a" else "b" end'))
         .to eq RubySimpleParser::CODE_WITHOUT_BLOCK
 
+      expect(subject.classify('Forecast.create lead: self if has_forecast? and !forecast'))
+        .to eq RubySimpleParser::CODE_WITHOUT_BLOCK
     end
 
     it 'classifies code with block' do
@@ -119,6 +126,8 @@ describe RubySimpleParser::LineClassifier do
       expect(subject.classify('  validate :queijo, only: do |alface| ')).to eq RubySimpleParser::CODE_WITH_BLOCK
       expect(subject.classify('        if @contact.errors.empty?')).to eq RubySimpleParser::CODE_WITH_BLOCK
       expect(subject.classify('alfaces.map{ |queijo|')).to eq RubySimpleParser::CODE_WITH_BLOCK
+      expect(subject.classify('local = if local_or_local_id.is_a? Local')).to eq RubySimpleParser::CODE_WITH_BLOCK
+      expect(subject.classify('  return if @contact.errors.empty? then')).to eq RubySimpleParser::CODE_WITH_BLOCK
     end
 
     it 'classifies block ending' do

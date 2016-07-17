@@ -1,6 +1,6 @@
 module RubySimpleParser
   class LineClassifier
-    BLOCK_SPANNING_CONSTRUCTS = ['if', 'unless', 'each', 'while', 'until', 'loop', 'for', 'begin', 'do']
+    BLOCK_SPANNING_CONSTRUCTS = ['if', 'unless', 'each', 'while', 'until', 'loop', 'for', 'begin', 'do', 'then']
 
     def classify(original_code_line, apply_normalize: true)
       code_line = if apply_normalize then normalize original_code_line else original_code_line end
@@ -14,7 +14,7 @@ module RubySimpleParser
       elsif code_line == ''
         return EMPTY
 
-      elsif code_line =~ inline_block_spanning_constructs_regex
+      elsif is_false_block_spanning_construct? code_line
         return CODE_WITHOUT_BLOCK
 
       elsif code_line == 'private'
@@ -52,8 +52,26 @@ module RubySimpleParser
       line.split('#').first.strip
     end
 
-    def inline_block_spanning_constructs_regex
-      Regexp.new '.+\b' + ['if', 'unless', 'while', 'until'].join('\b|\b') + '\b'
+    def is_false_block_spanning_construct?(code_line)
+      keywords_regex_part = inline_block_spanning_constructs_regex_part
+
+      return false if code_line =~ /.+\s*=\s*#{keywords_regex_part}/ # variable = if condition
+
+      # return if condition then 'a' else 'b' end
+      return true if code_line =~ /\breturn\b\s*#{keywords_regex_part}\s+.+\bthen\b.+\bend\b/
+
+      # return if condition then
+      #   'a' else 'b' end
+      return false if code_line =~ /\breturn\b\s*#{keywords_regex_part}.+\bthen\b.*/
+
+      # return [something] if condition
+      return true if code_line =~ /\breturn\b.*#{keywords_regex_part}/
+
+      return true if code_line =~ /[^\s]+.*#{keywords_regex_part}/ # something if condition
+    end
+
+    def inline_block_spanning_constructs_regex_part
+      '(\b' + ['if', 'unless', 'while', 'until'].join('\b|\b') + '\b)'
     end
 
     def block_spanning_constructs_regex

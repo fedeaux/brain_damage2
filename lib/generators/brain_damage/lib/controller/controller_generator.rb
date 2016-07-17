@@ -11,7 +11,6 @@ module BrainDamage
     end
 
     def generate
-      puts "Called generate #{@parser}"
       add_before_filters
       render
     end

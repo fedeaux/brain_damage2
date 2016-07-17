@@ -178,4 +178,14 @@ class Document < ActiveRecord::Base
   def self.users_emails_related_to_owners(documents)
     documents.map{ |document| document.owner.users }.flatten.map(&:email).uniq
   end
+
+  def child_of?(local_or_local_id)
+    local = if local_or_local_id.is_a? Local
+              local_or_local_id
+            else
+              Local.find local_or_local_id
+            end
+
+    ancestry.split('/').map(&:to_i).include? local_or_local_id
+  end
 end

@@ -26,7 +26,6 @@ module BrainDamage
       end
 
       def setup(file_name)
-        puts "Called setup"
         @current_file_name = file_name
         @current_code = File.read @current_file_name if File.exists? @current_file_name
         extract_definitions
