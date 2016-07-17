@@ -19,7 +19,11 @@ module RubySimpleParser
     end
 
     def add_line(line)
-      @lines << line
+      if line.is_a? String
+        CodeLine.new line, self
+      else
+        @lines << line
+      end
     end
 
     def print

@@ -35,13 +35,13 @@ module RubySimpleParser
         if [CLASS_START, CODE_WITH_BLOCK].include? line_class
           new_block = eval("RubySimpleParser::#{line_class}").new line_code, @context
           @context = new_block
-          puts "Entered context: #{@context.name}"
+          # puts "Entered context: #{@context.name}"
 
         elsif line_class == METHOD_START
           new_block = RubySimpleParser::Method.new line_code, @method_scope, @context
           @context = new_block
           @methods[@method_scope][new_block.name] = new_block
-          puts "Entered context: #{@context.name}"
+          # puts "Entered context: #{@context.name}"
 
         elsif line_class == PRIVATE_BLOCK
           @method_scope = :private
@@ -51,8 +51,10 @@ module RubySimpleParser
           new_block = RubySimpleParser::CodeLine.new line_code, @context
 
           if line_class == BLOCK_END
-            puts "Left context #{@context.name} and entered #{@context.parent.name}"
-            @context = @context.parent
+            if @context.parent
+              # puts "Left context #{@context.name} and entered #{@context.parent.name}"
+              @context = @context.parent
+            end
           end
         end
       end

@@ -4,6 +4,17 @@ require_relative '../../../lib/generators/brain_damage/lib/ruby_simple_parser/pa
 describe RubySimpleParser::LineClassifier do
   subject { RubySimpleParser::LineClassifier.new }
 
+  describe '.normalize' do
+    it 'strips whitespace and comments' do
+      expect(subject.normalize('  before_save :alface')).to eq 'before_save :alface'
+      expect(subject.normalize('  # alface crespa')).to eq ''
+      expect(subject.normalize('  end # end')).to eq 'end'
+      expect(subject.normalize('  # ## alface # crespa')).to eq ''
+      expect(subject.normalize(' "Catchier! #" # ## alface # crespa')).to eq '"Catchier! #"'
+      expect(subject.normalize(' "Catchy! #{interpolation}" + \'hyper catchy\'   #')).to eq "\"Catchy! \#{interpolation}\" + 'hyper catchy'"
+    end
+  end
+
   describe '.strip_block_wrappers' do
     it 'strips only block defining tokens' do
       expect(subject.strip_block_wrappers('  before_save :alface')).to eq []
@@ -48,11 +59,11 @@ describe RubySimpleParser::LineClassifier do
     end
 
     it 'classifies comments' do
-      expect(subject.classify('# alface')).to eq RubySimpleParser::COMMENT
-      expect(subject.classify('   # alface')).to eq RubySimpleParser::COMMENT
-      expect(subject.classify('     ### alface')).to eq RubySimpleParser::COMMENT
+      expect(subject.classify('# alface')).to eq RubySimpleParser::EMPTY
+      expect(subject.classify('   # alface')).to eq RubySimpleParser::EMPTY
+      expect(subject.classify('     ### alface')).to eq RubySimpleParser::EMPTY
 
-      expect(subject.classify('  def goiabada ### alface')).not_to eq RubySimpleParser::COMMENT
+      expect(subject.classify('  def goiabada ### alface')).not_to eq RubySimpleParser::EMPTY
     end
 
     it 'classifies empty lines' do

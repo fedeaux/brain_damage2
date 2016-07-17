@@ -3,7 +3,6 @@ module RubySimpleParser
   METHOD_START = 'Method'
   CODE_WITH_BLOCK = 'Block'
 
-  COMMENT = :comment
   CODE_WITHOUT_BLOCK = :class_code_without_block
   EMPTY = :empty
   OTHER = :other

@@ -3,13 +3,10 @@ module RubySimpleParser
     BLOCK_SPANNING_CONSTRUCTS = ['if', 'unless', 'each', 'while', 'until', 'loop', 'for', 'begin', 'do']
 
     def classify(original_code_line)
-      code_line = original_code_line.strip
+      code_line = normalize original_code_line
 
       if code_line =~ /def (self\.)?\w+/
         return METHOD_START
-
-      elsif code_line =~ /^\s*#/
-        return COMMENT
 
       elsif code_line =~ /^\s*class\s*/
         return CLASS_START
@@ -34,6 +31,31 @@ module RubySimpleParser
       else
         CODE_WITHOUT_BLOCK
       end
+    end
+
+    def normalize(original_line)
+      line = original_line.strip
+
+      return line if line == ''
+
+      substrings = line.scan(/".*"|'.*'/)
+      map = {}
+      count = 0
+
+      substrings.each do |substring|
+        placeholder = "RUBY_SIMPLE_PARSER_STRING_#{count}"
+        count += 1
+        line.gsub!(substring, placeholder)
+        map[placeholder] = substring
+      end
+
+      line = line.split('#').first.strip
+
+      map.each do |placeholder, substring|
+        line.gsub!(placeholder, substring)
+      end
+
+      line
     end
 
     def inline_block_spanning_constructs_regex

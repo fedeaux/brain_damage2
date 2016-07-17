@@ -4,11 +4,9 @@ require_relative '../../../lib/generators/brain_damage/lib/ruby_simple_parser/pa
 describe RubySimpleParser::Parser do
   describe '.parse' do
     it 'parses a well formatted rb file' do
-      parser = RubySimpleParser::Parser.new File.read 'spec/lib/ruby_simple_parser/examples/small_controller.rb'
+      parser = RubySimpleParser::Parser.new File.read 'spec/lib/ruby_simple_parser/examples/controller.rb'
       parser.parse
-      # puts parser.public_methods[:create].print
-
-  #     expect(parser.public_methods[:update].print).to eq File.read('spec/lib/ruby_simple_parser/examples/update.rb').chomp
+      expect(parser.public_methods[:update].print).to eq File.read('spec/lib/ruby_simple_parser/examples/update.rb').chomp
   #     expect(parser.leading_class_method_calls.map(&:print).first).to eq "  before_action :set_contact, only: [:show, :edit, :update, :destroy]"
   #   end
     end
