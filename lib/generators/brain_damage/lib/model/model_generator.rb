@@ -15,9 +15,9 @@ module BrainDamage
     end
 
     def prettify_lines
-      return if @parser.leading_class_method_calls.empty?
+      return if @parser.class_method_calls[:after_class_definition].empty?
 
-      infos = @parser.leading_class_method_calls.map { |line|
+      infos = @parser.class_method_calls[:after_class_definition].map { |line|
         code = line.print.strip
 
         order = if code.starts_with? 'include'
@@ -47,18 +47,18 @@ module BrainDamage
         if order != 0 then order else info_a[:code] <=> info_b[:code] end
       }
 
-      @parser.leading_class_method_calls = []
+      @parser.class_method_calls[:after_class_definition] = []
       current_info = infos.first
       new_line_number = 0
 
       infos.each do |info|
         if info[:order] != current_info[:order]
-          @parser.leading_class_method_calls << RubySimpleParser::CodeLine.new("NEW_LINE_#{new_line_number}")
+          @parser.class_method_calls[:after_class_definition] << RubySimpleParser::CodeLine.new("NEW_LINE_#{new_line_number}")
           new_line_number += 1
           current_info = info
         end
 
-        @parser.leading_class_method_calls << info[:line]
+        @parser.class_method_calls[:after_class_definition] << info[:line]
       end
     end
 
@@ -67,21 +67,21 @@ module BrainDamage
     end
 
     def improve_belongs_to_lines
-      return unless @parser and @parser.leading_class_method_calls
+      return unless @parser and @parser.class_method_calls[:after_class_definition]
 
-      belongs_to_lines = @parser.leading_class_method_calls.each_with_index.map { |line, index|
+      belongs_to_lines = @parser.class_method_calls[:after_class_definition].each_with_index.map { |line, index|
         [index, line.print]
       }.select{ |pair|
         pair.second =~ /belongs_to :(\w+)\s*$/
       }.map { |pair|
         [pair.first, add_options_to_belongs_to_line(pair.second) ]
       }.each { |pair|
-        @parser.leading_class_method_calls[pair.first].line = pair.second
+        @parser.class_method_calls[:after_class_definition][pair.first].line = pair.second
       }
     end
 
     def add_lines_from_fields
-      @parser.leading_class_method_calls += @resource.fields.values.map(&:model_lines).flatten.reject(&:nil?).reject(&:empty?).map { |line|
+      @parser.class_method_calls[:after_class_definition] += @resource.fields.values.map(&:model_lines).flatten.reject(&:nil?).reject(&:empty?).map { |line|
         RubySimpleParser::CodeLine.new line
 
       }

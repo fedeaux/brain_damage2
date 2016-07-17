@@ -8,13 +8,13 @@ require_relative 'line_classifier'
 
 module RubySimpleParser
   class Parser
+    attr_accessor :class_method_calls
+    attr_reader :class_definition
+
     def initialize(code = '')
       @code = code
       @line_classifier = LineClassifier.new
-      @methods = {
-        public: {},
-        private: {}
-      }
+      parse if code
     end
 
     def public_methods
@@ -31,16 +31,23 @@ module RubySimpleParser
       @code_lines.each_index do |line_number|
         line_code = @code_lines[line_number]
         line_class = @line_classifier.classify line_code
+        new_block = nil
 
-        if [CLASS_START, CODE_WITH_BLOCK].include? line_class
-          new_block = eval("RubySimpleParser::#{line_class}").new line_code, @context
+        if line_class == CLASS_START
+          new_block = RubySimpleParser::ClassDefinition.new line_code, @context
           @context = new_block
+          @class_definition = new_block
           # puts "Entered context: #{@context.name}"
+
+        elsif line_class == CODE_WITH_BLOCK
+          new_block = RubySimpleParser::Block.new line_code, @context
+          @context = new_block
 
         elsif line_class == METHOD_START
           new_block = RubySimpleParser::Method.new line_code, @method_scope, @context
           @context = new_block
           @methods[@method_scope][new_block.name] = new_block
+          @last_method = new_block.name
           # puts "Entered context: #{@context.name}"
 
         elsif line_class == PRIVATE_BLOCK
@@ -52,11 +59,31 @@ module RubySimpleParser
 
           if line_class == BLOCK_END
             if @context.parent
-              # puts "Left context #{@context.name} and entered #{@context.parent.name}"
+              # puts "Left context: #{@context.name} (line_class: #{line_class})"
               @context = @context.parent
             end
           end
         end
+
+        if new_block and (![EMPTY, BLOCK_END].include? line_class) and !new_block.is_a? ClassDefinition and
+          (( line_class == CODE_WITH_BLOCK and @context.parent.is_a? ClassDefinition ) or
+           @context.is_a? ClassDefinition )
+
+          if @last_method
+            @class_method_calls[@last_method] ||= []
+            @class_method_calls[@last_method] << new_block
+          else
+            @class_method_calls[:after_class_definition] << new_block
+          end
+        end
+      end
+    end
+
+    def class_method_calls_after(method)
+      if @class_method_calls.has_key? method
+        @class_method_calls[method]
+      else
+        []
       end
     end
 
@@ -70,9 +97,17 @@ module RubySimpleParser
       @parsed_code = {}
       @global_context = GlobalContext.new
       @context = @global_context
-      @class_method_call_scope = nil
 
-      @leading_class_method_calls = []
+      @methods = {
+        public: {},
+        private: {}
+      }
+
+      @last_method = nil
+
+      @class_method_calls = { after_class_definition: [] }
+      @class_definition = nil
+
       @method_scope = :public
     end
   end

@@ -11,12 +11,13 @@ module BrainDamage
     end
 
     def generate
+      puts "Called generate #{@parser}"
       add_before_filters
       render
     end
 
     def add_before_filters
-      @parser.leading_class_method_calls << RubySimpleParser::CodeLine.new(render_erb_string('before_action :set_<%= singular_table_name %>, only: <%= set_member_before_action_list.inspect %>').indent)
+      @parser.class_method_calls[:after_class_definition] << RubySimpleParser::CodeLine.new(render_erb_string('before_action :set_<%= singular_table_name %>, only: <%= set_member_before_action_list.inspect %>').indent)
     end
 
     def attribute_white_list

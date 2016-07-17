@@ -1,5 +1,68 @@
+# coding: utf-8
 class ContactsController < ApplicationController
   before_action :set_contact, only: [:show, :edit, :update, :destroy]
+
+  validates :kind, presence: true
+  validates :owner, presence: true
+
+  belongs_to :owner, polymorphic: true
+  belongs_to :created_by, class_name: 'User'
+
+  BILL_OF_SALE = 'BillOfSaleDocument'
+  BILL_OF_SERVICE = 'BillOfServiceDocument'
+  CLIENT_PO = 'ClientPODocument'
+  EXPORTER_PO = 'ExporterPODocument'
+  IMPORT_DECLARATION = 'ImportDeclarationDocument'
+  INSTRUTEC_PO = 'InstrutecPODocument'
+  OTHER = 'OtherDocument'
+  PROFORM = 'ProformDocument'
+  PROPOSAL = 'ProposalDocument'
+  SERVICE_ORDER = 'ServiceOrderDocument'
+  SALES_ORDER = 'SalesOrderDocument'
+  SHIPMENT = 'ShipmentDocument'
+
+  KIND_NAMES = {
+    Document::BILL_OF_SALE => 'Nota Fiscal',
+    Document::BILL_OF_SERVICE => 'Nota Fiscal do Serviço',
+    Document::CLIENT_PO => 'PO Cliente',
+    Document::EXPORTER_PO => 'PO Exportador',
+    Document::IMPORT_DECLARATION => 'Declaração de Importação',
+    Document::INSTRUTEC_PO => 'PO Instrutec',
+    Document::OTHER => 'Outro',
+    Document::PROFORM => 'Proforma',
+    Document::PROPOSAL => 'Proposta',
+    Document::SALES_ORDER => 'Sales Order',
+    Document::SERVICE_ORDER => 'Ordem de Serviço',
+    Document::SHIPMENT => 'Documentação de Embarque'
+  }
+
+  belongs_to :lead, foreign_key: :owner_id
+
+  mount_uploader :archive, ArchiveUploader
+
+  default_scope -> { order('created_at DESC') }
+
+  scope :by_kind, -> (kind) {
+    where(:kind => kind)
+  }
+
+  scope :expires_in, -> (date) {
+    joins(:lead).where('leads.level < 3 AND documents.validity = ?', date)
+  }
+
+  scope :expires_today, -> {
+    expires_in Date.today
+  }
+
+  scope :expires_in_20_days, -> {
+    expires_in Date.today - 20.days
+  }
+
+  scope :expirable, -> {
+    joins(:lead).where('leads.level < 3 AND documents.validity IS NOT NULL')
+  }
+
+  before_save :zip_file
 
   # POST /contacts
   def create

@@ -9,7 +9,7 @@ module RubySimpleParser
       @lines = []
 
       if definition
-        @name = "[#{definition.strip[0, 10]}...]"
+        @name = "[#{definition.strip[0, 20]}...]"
         RubySimpleParser::CodeLine.new(definition, self)
       else
         @name = :undefined_block

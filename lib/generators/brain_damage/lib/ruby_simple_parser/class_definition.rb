@@ -11,5 +11,9 @@ module RubySimpleParser
     def self.extract_class_name(code)
       (code.match CLASS_REGEX)[:class_name].to_sym
     end
+
+    def definition
+      @lines.first.print
+    end
   end
 end

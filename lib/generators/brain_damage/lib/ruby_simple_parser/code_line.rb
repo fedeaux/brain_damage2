@@ -3,10 +3,10 @@ module RubySimpleParser
     attr_accessor :line
     attr_reader :parent
 
-    def initialize(line, parent)
+    def initialize(line, parent = nil)
       @parent = parent
       @line = line
-      @parent.add_line self
+      @parent.add_line self if @parent
     end
 
     def print

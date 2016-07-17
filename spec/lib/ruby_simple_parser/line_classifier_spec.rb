@@ -1,3 +1,4 @@
+# coding: utf-8
 require 'spec_helper'
 require_relative '../../../lib/generators/brain_damage/lib/ruby_simple_parser/parser'
 
@@ -5,13 +6,15 @@ describe RubySimpleParser::LineClassifier do
   subject { RubySimpleParser::LineClassifier.new }
 
   describe '.normalize' do
-    it 'strips whitespace and comments' do
+    it 'strips whitespace, comments and replace string with placeholders' do
       expect(subject.normalize('  before_save :alface')).to eq 'before_save :alface'
       expect(subject.normalize('  # alface crespa')).to eq ''
       expect(subject.normalize('  end # end')).to eq 'end'
       expect(subject.normalize('  # ## alface # crespa')).to eq ''
-      expect(subject.normalize(' "Catchier! #" # ## alface # crespa')).to eq '"Catchier! #"'
-      expect(subject.normalize(' "Catchy! #{interpolation}" + \'hyper catchy\'   #')).to eq "\"Catchy! \#{interpolation}\" + 'hyper catchy'"
+      expect(subject.normalize(' "Catchier! #" # ## alface # crespa')).to eq "RUBY_SIMPLE_PARSER_STRING_0"
+      expect(subject.normalize(' "Catchy! #{interpolation}" + \'hyper catchy\'   #')).to eq "RUBY_SIMPLE_PARSER_STRING_0 + RUBY_SIMPLE_PARSER_STRING_1"
+
+      expect(subject.normalize %q{    [name.nil? ? '' : name.parameterize, owner.file_name_for(self), "#{created_at.strftime('%Y%m%d')}.zip"].join('_')}).to eq '[name.nil? ? RUBY_SIMPLE_PARSER_STRING_0 : name.parameterize, owner.file_name_for(self), RUBY_SIMPLE_PARSER_STRING_1].join(RUBY_SIMPLE_PARSER_STRING_2)'
     end
   end
 
@@ -23,6 +26,9 @@ describe RubySimpleParser::LineClassifier do
       expect(subject.strip_block_wrappers('  validate :queijo, only: do |alface| ')).to eq ['do']
       expect(subject.strip_block_wrappers('        if @contact.errors.empty?')).to eq ['if']
       expect(subject.strip_block_wrappers('alfaces.map{ |queijo|')).to eq ['{']
+      expect(subject.strip_block_wrappers("    Document::BILL_OF_SERVICE => 'Nota Fiscal do Serviço',")).to eq []
+      expect(subject.strip_block_wrappers %q{    [name.nil? ? '' : name.parameterize, owner.file_name_for(self), "#{created_at.strftime('%Y%m%d')}.zip"].join('_')}).to eq ['[',']']
+
     end
   end
 
@@ -31,7 +37,8 @@ describe RubySimpleParser::LineClassifier do
       expect(subject.block_balance('  before_save :alface')).to eq 0
       expect(subject.block_balance('        ifolia @contact.errors.empty?')).to eq 0
       expect(subject.block_balance('  before_save :dominion')).to eq 0
-
+      expect(subject.block_balance("    Document::BILL_OF_SERVICE => 'Nota Fiscal do Serviço',")).to eq 0
+      expect(subject.block_balance(%q{    [name.nil? ? '' : name.parameterize, owner.file_name_for(self), "#{created_at.strftime('%Y%m%d')}.zip"].join('_')})).to eq 0
 
       expect(subject.block_balance('  scope :alface, -> { |limonada| ')).to eq 1
       expect(subject.block_balance('  validate :queijo, only: do |alface| ')).to eq 1
@@ -45,6 +52,15 @@ describe RubySimpleParser::LineClassifier do
       expect(subject.block_balance('end.map{ |alface| alface.queijo }')).to eq -1
       expect(subject.block_balance('}.map{ |alface| alface.queijo }')).to eq -1
       expect(subject.block_balance('errors: @contact.errors }')).to eq -1
+
+      expect(subject.block_balance("if owner")).to eq 1
+      expect(subject.block_balance("begin")).to eq 1
+      expect(subject.block_balance(") do |doc|")).to eq 1
+      expect(subject.block_balance("doc.validity = attributes['validade'] if attributes['validade']")).to eq 1
+      expect(subject.block_balance("doc.archive = attributes[:archive] unless attributes[:archive].blank?")).to eq 1
+      expect(subject.block_balance("end")).to eq -1
+      expect(subject.block_balance("rescue")).to eq 0
+      expect(subject.block_balance(%q{puts "ERROR: #{folder}/#{attributes['purchase_order']}/[#{attributes['filename']}]"})).to eq 0
     end
   end
 
@@ -84,6 +100,16 @@ describe RubySimpleParser::LineClassifier do
       expect(subject.classify('alfaces.map(&:queijo)')).to eq RubySimpleParser::CODE_WITHOUT_BLOCK
       expect(subject.classify('alfaces.map{ |queijo| queijo.goiabada }')).to eq RubySimpleParser::CODE_WITHOUT_BLOCK
       expect(subject.classify('        ifolia @contact.errors.empty?')).to eq RubySimpleParser::CODE_WITHOUT_BLOCK
+
+      expect(subject.classify("    Document::BILL_OF_SERVICE => 'Nota Fiscal do Serviço',"))
+        .to eq RubySimpleParser::CODE_WITHOUT_BLOCK
+
+      expect(subject.classify("doc.validity = attributes['validade'] if attributes['validade']"))
+        .to eq RubySimpleParser::CODE_WITHOUT_BLOCK
+
+      expect(subject.classify("doc.archive = attributes[:archive] unless attributes[:archive].blank?"))
+        .to eq RubySimpleParser::CODE_WITHOUT_BLOCK
+
     end
 
     it 'classifies code with block' do

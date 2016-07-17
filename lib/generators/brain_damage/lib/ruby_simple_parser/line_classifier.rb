@@ -2,8 +2,8 @@ module RubySimpleParser
   class LineClassifier
     BLOCK_SPANNING_CONSTRUCTS = ['if', 'unless', 'each', 'while', 'until', 'loop', 'for', 'begin', 'do']
 
-    def classify(original_code_line)
-      code_line = normalize original_code_line
+    def classify(original_code_line, apply_normalize: true)
+      code_line = if apply_normalize then normalize original_code_line else original_code_line end
 
       if code_line =~ /def (self\.)?\w+/
         return METHOD_START
@@ -22,7 +22,7 @@ module RubySimpleParser
 
       end
 
-      block_balance = block_balance code_line
+      block_balance = block_balance code_line, apply_normalize: false
 
       if block_balance > 0
         CODE_WITH_BLOCK
@@ -38,7 +38,7 @@ module RubySimpleParser
 
       return line if line == ''
 
-      substrings = line.scan(/".*"|'.*'/)
+      substrings = line.scan(/".*?"|'.*?'/)
       map = {}
       count = 0
 
@@ -49,17 +49,11 @@ module RubySimpleParser
         map[placeholder] = substring
       end
 
-      line = line.split('#').first.strip
-
-      map.each do |placeholder, substring|
-        line.gsub!(placeholder, substring)
-      end
-
-      line
+      line.split('#').first.strip
     end
 
     def inline_block_spanning_constructs_regex
-      Regexp.new '\w+\s+\b' + ['if', 'unless', 'while', 'until'].join('\b|\b') + '\b'
+      Regexp.new '.+\b' + ['if', 'unless', 'while', 'until'].join('\b|\b') + '\b'
     end
 
     def block_spanning_constructs_regex
@@ -70,14 +64,16 @@ module RubySimpleParser
       Regexp.new('\b' +  BLOCK_SPANNING_CONSTRUCTS.join('\b|\b') + '\b|\bend\b|\{|\}|\[|\]')
     end
 
-    def strip_block_wrappers(code_line)
+    def strip_block_wrappers(original_code_line, apply_normalize: true)
+      code_line = if apply_normalize then normalize original_code_line else original_code_line end
       code_line.strip.scan block_wrappers_regex
     end
 
-    def block_balance(code_line)
+    def block_balance(original_code_line, apply_normalize: true)
+      code_line = if apply_normalize then normalize original_code_line else original_code_line end
       balance = 0
 
-      block_wrappers_tokens = strip_block_wrappers code_line
+      block_wrappers_tokens = strip_block_wrappers code_line, apply_normalize: false
 
       block_wrappers_tokens.each do |token|
         if BLOCK_SPANNING_CONSTRUCTS.include? token or token == '{' or token == '['

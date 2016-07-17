@@ -5,18 +5,65 @@ describe RubySimpleParser::Parser do
   describe '.parse' do
     it 'parses a well formatted rb file' do
       parser = RubySimpleParser::Parser.new File.read 'spec/lib/ruby_simple_parser/examples/controller.rb'
-      parser.parse
       expect(parser.public_methods[:update].print).to eq File.read('spec/lib/ruby_simple_parser/examples/update.rb').chomp
-  #     expect(parser.leading_class_method_calls.map(&:print).first).to eq "  before_action :set_contact, only: [:show, :edit, :update, :destroy]"
-  #   end
-    end
-  end
+      expect(parser.class_method_calls[:after_class_definition].map(&:print).first).to eq "  before_action :set_contact, only: [:show, :edit, :update, :destroy]"
 
-#   describe '.print' do
-#     it 'prints the original code' do
-#       code = File.read 'spec/lib/ruby_simple_parser/examples/controller.rb'
-#       parser = RubySimpleParser::Parser.new code
-#       expect(parser.print).to eq code
-#     end
-#   end
+      # parser.class_method_calls[:after_class_definition].each do |line|
+      #   puts '---------'
+      #   puts line.print
+      # end
+
+      # puts parser.public_methods.keys
+      # puts parser.private_methods.keys
+    end
+
+    it 'parses a complex method' do
+      parser = RubySimpleParser::Parser.new File.read 'spec/lib/ruby_simple_parser/examples/complex_method.rb'
+
+      # puts "After class definition:"
+      # parser.class_method_calls[:after_class_definition].each do |line|
+      #   puts '---------'
+      #   puts line.print
+      # end
+
+      # puts "Public Methods:"
+      # parser.public_methods.values.each do |method|
+      #   puts " -- name: #{method.name} --"
+      #   puts method.print
+      # end
+
+      # puts "Private Methods:"
+      # parser.private_methods.values.each do |method|
+      #   puts " -- name: #{method.name} --"
+      #   puts method.print
+      # end
+
+      # puts "[" +parser.public_methods[:"self.from_upload"].print + "]"
+    end
+
+    it 'parses another well formatted rb file' do
+      parser = RubySimpleParser::Parser.new File.read 'spec/lib/ruby_simple_parser/examples/model.rb'
+
+      # puts "After class definition:"
+      # parser.class_method_calls[:after_class_definition].each do |line|
+      #   puts '---------'
+      #   puts line.print
+      # end
+
+      # puts "Public Methods:"
+      # parser.public_methods.values.each do |method|
+      #   puts " -- name: #{method.name} --"
+      #   puts method.print
+      # end
+
+      # puts "Private Methods:"
+      # parser.private_methods.values.each do |method|
+      #   puts " -- name: #{method.name} --"
+      #   puts method.print
+      # end
+
+      # puts "[" +parser.public_methods[:"self.from_upload"].print + "]"
+    end
+
+  end
 end

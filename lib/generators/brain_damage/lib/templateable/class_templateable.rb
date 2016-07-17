@@ -26,6 +26,7 @@ module BrainDamage
       end
 
       def setup(file_name)
+        puts "Called setup"
         @current_file_name = file_name
         @current_code = File.read @current_file_name if File.exists? @current_file_name
         extract_definitions
@@ -37,7 +38,8 @@ module BrainDamage
 
       def leading_class_method_calls
         if @parser
-          @parser.leading_class_method_calls.map(&:print).uniq.join("\n")
+          @parser.class_method_calls[:after_class_definition].map(&:print).uniq.join("\n")
+
         else
           ''
         end
@@ -72,7 +74,7 @@ module BrainDamage
       end
 
       def class_definition
-        @parser.class_definition.print if @parser
+        @parser.class_definition.definition if @parser
       end
     end
   end
