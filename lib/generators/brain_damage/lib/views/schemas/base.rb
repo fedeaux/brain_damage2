@@ -7,7 +7,7 @@ module BrainDamage
       attr_reader :views
 
       def initialize(resource)
-        @views_names = ['index', 'show'] #, 'show', '_form', '_fields']
+        @views_names = ['index', 'show', '_fields', '_form'] #, 'show', '_form', '_fields']
         @views = {}
         @resource = resource
       end
@@ -26,8 +26,11 @@ module BrainDamage
 
         schema_class = self.class
 
+        view_class_name = name.gsub('/', '::').camelize
+
         loop do
-          specific_view_class_name = "BrainDamage::View::#{schema_class.name.demodulize}::#{name.camelize}"
+          specific_view_class_name = "BrainDamage::View::#{schema_class.name.demodulize}::#{view_class_name}"
+
           if Object.const_defined? specific_view_class_name
             @views[name] = eval(specific_view_class_name).new @resource, options
             break
@@ -50,29 +53,6 @@ module BrainDamage
           if schema_class == Object
             puts "ERROR: Unable to find any class capable of rendering the view: #{name}"
             break
-          end
-        end
-      end
-
-      private
-      def describe_view_using_specific_class(name, options = {}, use_generic_view_class: false)
-        schema_class = self.class
-
-        if use_generic_view_class
-          view_class_name = 'Base'
-          options[:file_name] = "#{name}.html.haml" unless options[:file_name]
-          options[:template_name] = "#{name}.html.haml" unless options[:template_name]
-        else
-          view_class_name = name.camelize
-        end
-
-        until @views[name]
-          begin
-            @views[name] = eval().new @resource, options
-
-          rescue
-            break if schema_class.superclass == Object
-            schema_class = schema_class.superclass
           end
         end
       end

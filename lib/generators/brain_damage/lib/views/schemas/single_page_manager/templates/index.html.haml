@@ -1,8 +1,11 @@
-%h1.ui.header
+%h1
   = "#{cet('<%= "entities.#{plural_table_name}" %>')}"
 
-<%= template_hook 'before index.body' %>
+.ui.two.column.grid
+  .column
+    <%= template_hook 'before list.index' %>
+    = r '<%= plural_table_name %>/list/index', <%= plural_table_name %>: @<%= plural_table_name %>
+    <%= template_hook 'after list.index' -%>
 
--# = r '<%= plural_table_name %>/list, <%= plural_table_name %>: @<%= plural_table_name %>
-
-<%= template_hook 'after index.body' -%>
+  .column
+    = r '<%= plural_table_name %>/form'

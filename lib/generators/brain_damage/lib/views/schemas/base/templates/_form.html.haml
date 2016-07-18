@@ -1,0 +1,15 @@
+- <%= singular_table_name %> ||= @<%= singular_table_name %> || <%= name %>.new
+- form_id = "<%= plural_table_name %>-form-#{bd_id}"
+
+- @single_page_manager_options ||= Hash.new(false)
+- nested_on ||= @single_page_manager_options[:nested_on]
+
+= form_for <%= singular_table_name %>, html: { id: form_id, class: 'ui form', multipart: <%= multipart? %>, data: { single_page_manager_form_context: @single_page_manager_options[:form_context] } }, remote: <%= remote? %>, validate: true do |f|
+  = r '<%= plural_table_name %>/fields', <%= singular_table_name %>: <%= singular_table_name %>, nested_on: nested_on, f: f
+  = hidden_field_tag 'partial_locals[single_page_manager_options]', @single_page_manager_options.to_json
+
+  .actions
+    = f.submit cet('actions.save'), class: 'ui primary button'
+
+    - if @single_page_manager_options[:cancel_button] and !@single_page_manager_options[:explicit_form]
+      .ui.basic.button.brain-damage-cancel= cet('actions.cancel')

@@ -13,16 +13,35 @@ module BrainDamage
         end
 
         def set_file_and_template_names(options)
-          @file_name = (options[:file_name] || "#{self.class.name.split('::').last.underscore}.html.haml") unless @file_name
+          @file_name = (options[:file_name] || "#{self.class.name.split('::').last.underscore}.html.haml")
           @template_file = (options[:template_name] || "#{self.class.name.split('::').last.underscore}.html.haml") unless @template_file
+
+          unless self.class.has_template? @template_file
+            partial_version = partialize_file_name @template_file
+            if self.class.has_template? partial_version
+              @template_file = partial_version
+            end
+
+            @file_name = partialize_file_name @file_name
+          end
+        end
+
+        def partialize_file_name(file_name)
+          parts = file_name.split '/'
+
+          if parts.length == 1
+            "_#{parts.first.gsub('^_', '')}"
+          else
+            (parts[0...-1] + ["_#{parts.last.gsub('^_', '')}"]).join '/'
+          end
         end
 
         def fields
-          @resource.fields
+          @resource.fields.values
         end
 
         def self.has_template?(name)
-          File.exists? File.join(dir, 'templates', "#{name}.html.haml")
+          File.exists? File.join(dir, 'templates', "#{name.gsub('.html.haml', '')}.html.haml")
         end
 
         private
