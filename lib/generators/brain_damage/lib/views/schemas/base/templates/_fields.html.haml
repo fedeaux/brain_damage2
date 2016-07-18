@@ -3,6 +3,8 @@
 - if f.object.id
   = f.hidden_field :id, {name: name_for_input_tag(:id, prefix)}
 
-<% for field in fields -%>
-%label <%= field.name %>
+<% for field in inputable_fields -%>
+.field
+  %label= <%= field.label[:text] %>
+  = f.text_field :<%= field.name %>
 <% end -%>

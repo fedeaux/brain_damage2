@@ -1,9 +1,10 @@
 # coding: utf-8
 require_relative 'field_white_list'
 require_relative 'relation/base'
+require_relative 'templateable/base'
 
 module BrainDamage
-  class Field
+  class Field < Templateable::Base
     attr_reader :relation
     attr_writer :attr_white_list
     attr_reader :name
@@ -11,6 +12,7 @@ module BrainDamage
     def initialize(args = {})
       @displays = {}
       @inputs = {}
+      @labels = {}
 
       @name = args[:name]
       @resource = args[:resource]
@@ -22,6 +24,18 @@ module BrainDamage
 
     def input=(options)
       add_input :default, options
+    end
+
+    def label=(options)
+      add_label :default, options
+    end
+
+    def has_input?
+      @inputs.values.reject(&:nil?).any?
+    end
+
+    def has_display?
+      @displays.values.reject(&:nil?).any?
     end
 
     def invisible
@@ -44,9 +58,26 @@ module BrainDamage
       @inputs[identifier] = options
     end
 
+    def add_label(identifier, options)
+      @labels[identifier] = options
+    end
+
+    def label(scope = :default)
+      if @labels[scope]
+        return @labels[scope]
+
+      elsif scope == :default
+        self.label = { text: render_erb_string("cet('<%= singular_table_name %>.<%= name %>')") }
+
+      else
+        puts "ERROR: Unable to find label with scope [#{scope}]"
+      end
+
+      label(:default)
+    end
+
     def model_lines
       return @relation.model_lines if @relation
-
       []
     end
 

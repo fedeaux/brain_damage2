@@ -36,8 +36,16 @@ module BrainDamage
           end
         end
 
-        def fields
+        def fields(only: nil, except: nil)
           @resource.fields.values
+        end
+
+        def inputable_fields
+          fields.select(&:has_input?)
+        end
+
+        def displayable_fields
+          fields.select(&:has_display?)
         end
 
         def self.has_template?(name)

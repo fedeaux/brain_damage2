@@ -5,7 +5,7 @@ module BrainDamage
         def initialize(resource, options = {})
           options = {
             multipart: false,
-            remote: true
+            remote: false
           }.merge options
 
           super resource, options
