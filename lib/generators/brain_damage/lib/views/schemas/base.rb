@@ -7,9 +7,29 @@ module BrainDamage
       attr_reader :views
 
       def initialize(resource)
-        @views_names = ['index', 'show', '_fields', '_form'] #, 'show', '_form', '_fields']
+        find_views_names
+
         @views = {}
         @resource = resource
+      end
+
+      def find_views_names
+        schema_class = self.class
+        @views_names = []
+
+        loop do
+          path = File.join(dir, schema_class.name.demodulize.underscore, 'templates/')
+          @views_names += Dir.glob(path + '**/*' ).select{ |name|
+            name =~ /html.haml$/
+          }.map{ |name|
+            name.gsub('.html.haml', '').gsub(path, '')
+          }
+
+          break if schema_class == BrainDamage::ViewSchemas::Base
+          schema_class = schema_class.superclass
+        end
+
+        @views_names.uniq!
       end
 
       def ensure_views_descriptions
@@ -55,6 +75,15 @@ module BrainDamage
             break
           end
         end
+      end
+
+      private
+      def self.dir
+        __dir__
+      end
+
+      def dir
+        __dir__
       end
     end
   end
