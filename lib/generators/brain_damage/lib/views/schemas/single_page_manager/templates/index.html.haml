@@ -1,0 +1,8 @@
+%h1.ui.header
+  = "#{cet('<%= "entities.#{plural_table_name}" %>')}"
+
+<%= template_hook 'before index.body' %>
+
+-# = r '<%= plural_table_name %>/list, <%= plural_table_name %>: @<%= plural_table_name %>
+
+<%= template_hook 'after index.body' -%>
