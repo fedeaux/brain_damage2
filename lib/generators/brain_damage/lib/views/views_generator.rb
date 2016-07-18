@@ -5,6 +5,7 @@ module BrainDamage
   class ViewsGenerator
     def initialize(resource)
       @schemas = []
+      @views = {}
       @resource = resource
     end
 
@@ -12,11 +13,16 @@ module BrainDamage
     end
 
     def add_schema(name)
-      name = name.to_s
-      schema = BrainDamage::ViewSchemas::Factory.create name
+      schema = BrainDamage::ViewSchemas::Factory.create name, @resource
       @schemas << schema
       yield schema if block_given?
       schema.ensure_views_descriptions
+
+      @views.merge! schema.views
+    end
+
+    def views
+      @views.values
     end
 
     private

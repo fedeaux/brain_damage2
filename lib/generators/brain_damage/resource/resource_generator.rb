@@ -55,6 +55,12 @@ module BrainDamage
       create_file(@resource.model.current_file_name) { @resource.model.generate }
     end
 
+    def generate_views
+      @resource.views.views.each do |view|
+        create_file(File.join('app/views/', controller_file_name, view.file_name)) { view.render }
+      end
+    end
+
     def improve_migration_code
       return if @ignore_migration
       file_name = @resource.migration.migration_file_full_path
