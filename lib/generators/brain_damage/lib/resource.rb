@@ -10,6 +10,7 @@ module BrainDamage
     attr_reader :controller
     attr_reader :fields
     attr_reader :model
+    attr_reader :views
     attr_reader :migration
     attr_reader :parametizer
 
@@ -21,6 +22,7 @@ module BrainDamage
       @migration = BrainDamage::Migration.new self
       @controller = BrainDamage::ControllerGenerator.new self
       @model = BrainDamage::ModelGenerator.new self
+      @views = BrainDamage::ViewsGenerator.new self
 
       initializers.each do |initializer|
         instance_eval initializer.read, initializer.path if initializer.is_a? File
@@ -68,6 +70,10 @@ module BrainDamage
 
     def describe_model
       yield @model if block_given?
+    end
+
+    def describe_views
+      yield @views if block_given?
     end
 
     def ensure_every_column_is_described
