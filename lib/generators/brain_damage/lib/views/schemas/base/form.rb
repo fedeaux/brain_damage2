@@ -5,7 +5,7 @@ module BrainDamage
         def initialize(resource, options = {})
           options = {
             multipart: false,
-            remote: false
+            remote: true
           }.merge options
 
           super resource, options
@@ -18,7 +18,6 @@ module BrainDamage
         def remote?
           @options[:remote]
         end
-
       end
     end
   end
