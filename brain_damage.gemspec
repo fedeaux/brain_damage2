@@ -7,7 +7,7 @@ Gem::Specification.new do |spec|
   spec.name          = "brain_damage"
   spec.version       = BrainDamage::VERSION
   spec.authors       = ["Pedro Bernardes"]
-  spec.email         = ["ph@everywhere.com.br"]
+  spec.email         = ["phec06@gmail.com"]
 
   spec.summary       = %q{A application scaffold generator on roids}
   spec.description   = %q{Can't explain better than that :)}
@@ -32,4 +32,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rspec"
 
   spec.add_dependency 'schema_plus'
+  spec.add_dependency 'client_side_validations'
 end
