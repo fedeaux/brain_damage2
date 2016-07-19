@@ -1,0 +1,21 @@
+- <%= singular_table_name %> = <%= singular_table_name %> || @<%= singular_table_name %> || <%= name %>.new
+
+- @single_page_manager_options ||= Hash.new(false)
+- nested_on ||= @single_page_manager_options[:nested_on]
+
+= form_for <%= singular_table_name %>, html: { class: 'ui form' }, remote: true, validate: true do |f|
+  = r '<%= plural_table_name %>/fields', <%= singular_table_name %>: <%= singular_table_name %>, nested_on: nested_on, f: f
+
+  = hidden_field_tag 'partial_locals[single_page_manager_options]', @single_page_manager_options.to_json
+
+  .actions
+    - if <%= singular_table_name %>.persisted?
+      %button.ui.small.icon.primary.button{ type: :submit }
+        %i.save.icon
+
+      .ui.small.basic.icon.button.brain-damage-cancel
+        %i.remove.icon
+
+    - else
+      = f.submit cet('actions.add'), class: 'ui primary button'
+      .ui.basic.button.brain-damage-cancel= cet('actions.cancel')

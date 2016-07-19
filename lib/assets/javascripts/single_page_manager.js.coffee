@@ -29,7 +29,7 @@ class @BrainDamage.SinglePageManager
 
       else
         options =
-          target: $ 'thead', @list
+          target: $ '.brain-damage-list-header', @list
           strategy: 'after'
           callbacks: callbacks
 

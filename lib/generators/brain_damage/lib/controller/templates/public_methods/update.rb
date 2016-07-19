@@ -5,7 +5,7 @@ def update
 
   respond_to do |format|
     format.json {
-      partial = params[:partial_to_show] ? params[:partial_to_show] : 'table.item'
+      partial = params[:partial_to_show] ? params[:partial_to_show] : '<%= plural_table_name %>/list/item'
       render json: { html: render_to_string( partial: partial, formats: [:html], locals: get_partial_locals ),
                         errors: @<%= singular_table_name %>.errors }
     }

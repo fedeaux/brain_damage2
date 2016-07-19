@@ -1,11 +1,1 @@
-%h1
-  = "#{cet('<%= "entities.#{plural_table_name}" %>')}"
-
-.ui.two.column.grid
-  .column
-    <%= template_hook 'before list.index' %>
-    = r '<%= plural_table_name %>/list/index', <%= plural_table_name %>: @<%= plural_table_name %>
-    <%= template_hook 'after list.index' -%>
-
-  .column
-    = r '<%= plural_table_name %>/form'
+= r 'areas/single_page_manager'

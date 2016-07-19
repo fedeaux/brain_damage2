@@ -6,6 +6,18 @@ module BrainDamage
       class Base < Base::Base
         attr_reader :file_name
 
+        def editable_guard
+          'true'
+        end
+
+        def deletable_guard
+          'true'
+        end
+
+        def viewable_guard
+          '@single_page_manager_options[:viewable]'
+        end
+
         private
         def self.dir
           __dir__

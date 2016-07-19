@@ -18,7 +18,6 @@ class @BrainDamage.AjaxForm
     else
       @target = @wrapper
 
-    # @wrapper.on 'ajax:before', @remove_errors
     @wrapper.on 'ajax:before', @block_wrapper
     @wrapper.on 'ajax:complete', @ajax_complete
 

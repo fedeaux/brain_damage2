@@ -18,7 +18,6 @@
 
 .brain-damage-inline-edit, .polymorphic-hybrid-input-wrapper
   display: block
-  /* display: inline-block
   position: relative
 
   .field
@@ -29,9 +28,6 @@
     .field
       label.input-label
         display: block
-
-  /* &.brain-damage-block-inline-edit
-  /*   display: block
 
   .brain-damage-inline-edit-display
     &:hover
@@ -61,7 +57,10 @@ td, .field
   a
     cursor: pointer
 
-.brain-damage-list-item:hover, .brain-damage-with-hidden-actions:hover, .brain-damage-show-inline-display:hover
+.brain-damage-list-item-wrapper
+  position: relative
+
+.brain-damage-list-item-wrapper:hover, .brain-damage-with-hidden-actions:hover, .brain-damage-show-inline-display:hover
   .brain-damage-actions
     opacity: 1
 
@@ -123,7 +122,9 @@ td, .field
   overflow-y: scroll
 
 .brain-damage-actions-wrapper
-  position: relative
+  position: absolute
+  top: 4px
+  right: 4px
 
 h3.ui.header
   margin-bottom: 0 !important

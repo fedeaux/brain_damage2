@@ -1,5 +1,6 @@
 - <%= plural_table_name %> ||= @<%= plural_table_name %>
 
-.ui.form.list
+.ui.form.brain-damage-list
+  .brain-damage-list-header
   - <%= plural_table_name %>.each do |<%= singular_table_name %>|
     = r "<%= plural_table_name %>/list/item", <%= singular_table_name %>: <%= singular_table_name %>

@@ -1,0 +1,20 @@
+- single_page_manager_id = bd_id 'single-page-manager'
+- <%= plural_table_name %> ||= @<%= plural_table_name %>
+
+- @single_page_manager_options ||= Hash.new(false)
+- @single_page_manager_options[:single_page_manager_script_duplicate_guard] = true
+
+%h1
+  = "#{cet('<%= "entities.#{plural_table_name}" %>')}"
+
+.ui.two.column.grid.brain-damage-single-page-manager{ id: single_page_manager_id }
+  .column
+    <%= template_hook 'before list.index' %>
+    = r '<%= plural_table_name %>/list/index', <%= plural_table_name %>: @<%= plural_table_name %>
+    <%= template_hook 'after list.index' -%>
+
+  .column
+    = r '<%= plural_table_name %>/form'
+
+  :coffeescript
+    new BrainDamage.SinglePageManager "##{single_page_manager_id}"
