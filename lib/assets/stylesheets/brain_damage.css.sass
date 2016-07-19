@@ -1,0 +1,190 @@
+@import 'compass'
+
+@mixin smooth-transition
+  transition: all .2s ease-in-out
+
+.icon-wrapper
+  font-size: 14px !important
+  padding-left: .8em
+
+.brain-damage-empty
+  font-size: 11px
+  color: gray
+
+.detail-header
+  font-size: 11px
+  color: gray
+  text-transform: uppercase
+
+.brain-damage-inline-edit, .polymorphic-hybrid-input-wrapper
+  display: block
+  /* display: inline-block
+  position: relative
+
+  .field
+    label.input-label
+      display: none
+
+  .brain-damage-single-page-manager-table
+    .field
+      label.input-label
+        display: block
+
+  /* &.brain-damage-block-inline-edit
+  /*   display: block
+
+  .brain-damage-inline-edit-display
+    &:hover
+      +smooth-transition
+      background-color: rgba(0, 0, 255, 0.15)
+
+      .brain-damage-inline-edit-actions
+        opacity: 1
+
+td, .field
+  .brain-damage-inline-edit
+    display: block
+
+.paragraph
+  margin-bottom: 1em
+
+.brain-damage-edit-list-item, .brain-damage-show-inline-form, .brain-damage-inline-edit-form
+  display: none
+
+.brain-damage-actions, .brain-damage-inline-edit-actions
+  opacity: 0
+  transition: opacity .25s ease-in-out
+  position: absolute
+  top: 2px
+  right: 2px
+
+  a
+    cursor: pointer
+
+.brain-damage-list-item:hover, .brain-damage-with-hidden-actions:hover, .brain-damage-show-inline-display:hover
+  .brain-damage-actions
+    opacity: 1
+
+.brain-damage-nested-form-add-button
+  margin-bottom: 14px !important
+
+.brain-damage-nested-form-line
+  position: relative
+  padding: 7px
+  border: 1px solid rgba(34, 36, 38, 0.15)
+  border-radius: 0.285714rem
+  margin-bottom: 14px
+
+  label
+    font-weight: normal !important
+    font-size: 0.8em !important
+
+  .grid
+    margin-top: 0 !important
+
+    .row:first-child
+      padding-top: 0 !important
+
+  .brain-damage-nested-form-destroy-button
+    +smooth-transition
+    display: none
+    position: absolute
+    top: 7px
+    right: 7px
+    z-index: 2
+    opacity: 0.5
+
+    &:hover
+      opacity: 1
+
+  .brain-damage-nested-form-remove-button
+    @extend .brain-damage-nested-form-destroy-button
+    transform: scale(0.65)
+
+  &:hover
+    background-color: rgba(0, 0, 0, 0.1)
+
+    .brain-damage-nested-form-remove-button, .brain-damage-nested-form-destroy-button
+      display: inline
+
+.ui.fluid.basic.label
+  &.with-checkbox
+    *
+      cursor: pointer
+
+    .fluid.checkbox
+      width: 100%
+
+      label
+        width: 100% !important
+
+.collection-check-boxes-wrapper
+  max-height: 30em
+  overflow-y: scroll
+
+.brain-damage-actions-wrapper
+  position: relative
+
+h3.ui.header
+  margin-bottom: 0 !important
+
+h2.ui.header
+  font-size: 1.28rem !important
+
+pre.preformatted
+  margin: 0
+  white-space: pre-wrap
+
+.float-right
+  float: right
+
+.line-with-ellipsis
+  max-width: 100%
+  display: inline-block
+  overflow: hidden
+  text-overflow: ellipsis
+  white-space: nowrap
+
+.collapsible-content
+  position: relative
+
+  .content
+    +box-shadow
+    display: none
+    position: absolute
+    left: 0
+    top: 100%
+    z-index: 1
+
+  &:hover
+    .content
+      display: block
+
+
+form.ui.form.inline
+  display: inline
+
+.ui.label
+  &.marginless
+    margin: 0 !important
+
+  &.circular.icon
+    .icon
+      margin: 0 !important
+
+.button
+  &.icon-only
+    .icon
+      margin: 0 !important
+
+.brain-damage-block-association-list
+  .label
+    margin: 0 !important
+
+.brain-damage-block-association-list, .collection-check-boxes
+  max-height: 16em
+  overflow-y: scroll
+
+.icon
+  &.action
+    cursor: pointer
