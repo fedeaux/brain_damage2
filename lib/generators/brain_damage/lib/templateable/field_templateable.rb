@@ -3,8 +3,13 @@ require_relative 'base'
 module BrainDamage
   module Templateable
     class FieldTemplateable < Templateable::Base
+      attr_reader :type
+      attr_reader :partial_html
+
       def initialize(field, options)
         @field = field
+        @type = self.class.to_s.split('::').last.underscore.to_sym
+
         resource = field.resource
         super resource, options
       end

@@ -53,7 +53,7 @@ module BrainDamage
     end
 
     def label=(options)
-      add_label :default, options
+      add_label :default, options unless options == nil
     end
 
     def has_input?
@@ -65,7 +65,7 @@ module BrainDamage
     end
 
     def add_display(identifier, options)
-      @displays[identifier] = options
+      @displays[identifier] = View::Factory.create :display, self, options
     end
 
     def add_input(identifier, options)

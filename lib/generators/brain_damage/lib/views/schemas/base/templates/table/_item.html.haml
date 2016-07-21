@@ -1,4 +1,5 @@
 %tr
 <% for field in displayable_fields -%>
-  %td= <%= singular_table_name %>.<%= field.name %>
+  %td
+<%= field.display.render.indent 2 %>
 <% end -%>

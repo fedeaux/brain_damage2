@@ -1,5 +1,5 @@
 <% for field in displayable_fields -%>
 .field
   %label= <%= field.label[:text] %>
-  = <%= singular_table_name %>.<%= field.name %>
+<%= field.display.render.indent 1 %>
 <% end -%>

@@ -3,7 +3,7 @@ require_relative '../../templateable/field_templateable'
 
 module BrainDamage
   module View
-    module Input
+    module Display
       class Base < Templateable::FieldTemplateable
         def dir
           __dir__
