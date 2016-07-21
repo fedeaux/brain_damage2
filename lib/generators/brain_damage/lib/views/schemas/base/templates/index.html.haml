@@ -11,6 +11,6 @@
 
 <%= template_hook 'before index.body' %>
 
--# = r '<%= plural_table_name %>/index', <%= plural_table_name %>: @<%= plural_table_name %>
+= r '<%= plural_table_name %>/table/index', <%= plural_table_name %>: @<%= plural_table_name %>
 
 <%= template_hook 'after index.body' -%>
