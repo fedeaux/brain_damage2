@@ -14,6 +14,10 @@ module BrainDamage
         super resource, options
       end
 
+      def empty_haml_path
+        'brain_damage/empty'
+      end
+
       def method_missing(method, *args, &block)
         @field.send method, *args, &block
       end

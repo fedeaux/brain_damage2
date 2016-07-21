@@ -2,7 +2,8 @@
 - if <%= link_target %>
   = link_to <%= link_text %>, <%= link_target %>
 - else
-  <%= empty_haml %>
+  = r "<%= empty_haml_path %>"
+
 <% else %>
 = link_to <%= link_text %>, <%= link_target %>
 <% end %>

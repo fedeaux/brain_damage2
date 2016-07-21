@@ -4,14 +4,14 @@ require_relative 'base'
 module BrainDamage
   module View
     module Display
-      class LinkTo < Base
+      class Text < Base
         def initialize(field, options)
           super
           @display_method = options[:display_method] || name
           @target_method = options[:target_method] || name
         end
 
-        def link_text
+        def text
           text = if foreign? then
                    "#{singular_table_name}.#{@target_method}.#{@display_method}"
                  else
@@ -22,7 +22,7 @@ module BrainDamage
           link_target
         end
 
-        def link_target
+        def target
           return "#{singular_table_name}.#{@target_method}" if foreign?
           "#{singular_table_name}"
         end

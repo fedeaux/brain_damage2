@@ -1,1 +1,9 @@
 - <%= singular_table_name %> ||= @<%= singular_table_name %>
+
+.ui.form
+
+<% for field in displayable_fields -%>
+  .field
+    %label= <%= field.label[:text] %>
+<%= field.display.render.indent 2 %>
+<% end -%>
