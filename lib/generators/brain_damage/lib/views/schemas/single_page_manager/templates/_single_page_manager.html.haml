@@ -13,7 +13,7 @@
     = r '<%= plural_table_name %>/list/index', <%= plural_table_name %>: @<%= plural_table_name %>
     <%= template_hook 'after list.index' -%>
 
-  .column
+  .column.brain-damage-add-form-wrapper
     = r '<%= plural_table_name %>/form'
 
   :coffeescript

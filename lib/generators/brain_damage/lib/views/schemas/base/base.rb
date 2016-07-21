@@ -1,10 +1,10 @@
 # coding: utf-8
-require_relative '../../../templateable/base'
+require_relative '../../../templateable/view_templateable'
 
 module BrainDamage
   module View
     module Base
-      class Base < Templateable::Base
+      class Base < Templateable::ViewTemplateable
         attr_reader :file_name
 
         def initialize(resource, options = {})

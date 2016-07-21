@@ -57,7 +57,11 @@ module BrainDamage
 
     def generate_views
       @resource.views.views.each do |view|
-        create_file(File.join('app/views/', controller_file_name, view.file_name)) { view.render }
+        target_file_name = File.join('app/views/', controller_file_name, view.file_name)
+
+        unless Templateable::ViewTemplateable.skip_overwrite? target_file_name
+          create_file(target_file_name) { view.render }
+        end
       end
     end
 
