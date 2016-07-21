@@ -33,6 +33,7 @@ module BrainDamage
 
     def setup(generator)
       @generator = generator
+      ensure_every_column_has_its_generated_attribute_object
     end
 
     def column_relation_type(column_name)
@@ -82,6 +83,12 @@ module BrainDamage
           field.display = :default
           field.input = :default
         end
+      end
+    end
+
+    def ensure_every_column_has_its_generated_attribute_object
+      attributes.each do |attribute|
+        @fields[attribute.name.to_sym].generated_attribute = attribute
       end
     end
 

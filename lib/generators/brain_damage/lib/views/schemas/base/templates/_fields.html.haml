@@ -6,5 +6,5 @@
 <% for field in inputable_fields -%>
 .field
   %label= <%= field.label[:text] %>
-  = f.text_field :<%= field.name %>
+<%= field.input.render.indent 1 %>
 <% end -%>

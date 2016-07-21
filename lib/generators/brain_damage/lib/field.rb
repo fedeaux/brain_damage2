@@ -2,12 +2,16 @@
 require_relative 'field_white_list'
 require_relative 'relation/base'
 require_relative 'templateable/base'
+require_relative 'views/factory'
 
 module BrainDamage
   class Field < Templateable::Base
-    attr_reader :relation
-    attr_writer :attr_white_list
     attr_reader :name
+    attr_reader :relation
+    attr_reader :resource
+
+    attr_writer :attr_white_list
+    attr_accessor :generated_attribute
 
     def initialize(args = {})
       @displays = {}
@@ -16,26 +20,6 @@ module BrainDamage
 
       @name = args[:name]
       @resource = args[:resource]
-    end
-
-    def display=(options)
-      add_display :default, options
-    end
-
-    def input=(options)
-      add_input :default, options
-    end
-
-    def label=(options)
-      add_label :default, options
-    end
-
-    def has_input?
-      @inputs.values.reject(&:nil?).any?
-    end
-
-    def has_display?
-      @displays.values.reject(&:nil?).any?
     end
 
     def invisible
@@ -50,12 +34,42 @@ module BrainDamage
       @relation = Relation.create (@resource.column_relation_type(@name) || options[:type]), options
     end
 
+    def model_lines
+      return @relation.model_lines if @relation
+      []
+    end
+
+    def attr_white_list
+      @field_white_list = FieldWhiteList.new(self, @attr_white_list) unless @field_white_list
+      @field_white_list.list
+    end
+
+    def display=(options)
+      add_display :default, options unless options == nil
+    end
+
+    def input=(options)
+      add_input :default, options unless options == nil
+    end
+
+    def label=(options)
+      add_label :default, options
+    end
+
+    def has_input?
+      @inputs.values.reject(&:nil?).any?
+    end
+
+    def has_display?
+      @displays.values.reject(&:nil?).any?
+    end
+
     def add_display(identifier, options)
       @displays[identifier] = options
     end
 
     def add_input(identifier, options)
-      @inputs[identifier] = options
+      @inputs[identifier] = View::Factory.create :input, self, options
     end
 
     def add_label(identifier, options)
@@ -76,14 +90,20 @@ module BrainDamage
       label(:default)
     end
 
-    def model_lines
-      return @relation.model_lines if @relation
-      []
+    def input(identifier = :default)
+      @inputs[identifier]
     end
 
-    def attr_white_list
-      @field_white_list = FieldWhiteList.new(self, @attr_white_list) unless @field_white_list
-      @field_white_list.list
+    def display(identifier = :default)
+      @displays[identifier]
+    end
+
+    def field_type
+      if generated_attribute
+        generated_attribute.field_type
+      else
+        :text_field
+      end
     end
   end
 end
