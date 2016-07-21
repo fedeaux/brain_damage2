@@ -34,6 +34,10 @@ module BrainDamage
       @relation = Relation.create (@resource.column_relation_type(@name) || options[:type]), options
     end
 
+    def foreign?
+      @relation.is_a? Relation
+    end
+
     def model_lines
       return @relation.model_lines if @relation
       []

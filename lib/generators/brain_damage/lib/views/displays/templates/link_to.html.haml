@@ -1,0 +1,8 @@
+<% if include_existance_check? %>
+- if <%= link_target %>
+  = link_to <%= link_text %>, <%= link_target %>
+- else
+  <%= empty_haml %>
+<% else %>
+= link_to <%= link_text %>, <%= link_target %>
+<% end %>
