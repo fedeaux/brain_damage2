@@ -23,6 +23,7 @@ module BrainDamage
       @controller = BrainDamage::ControllerGenerator.new self
       @model = BrainDamage::ModelGenerator.new self
       @views = BrainDamage::ViewsGenerator.new self
+      @closed_for_field_description = false
 
       initializers.each do |initializer|
         instance_eval initializer.read, initializer.path if initializer.is_a? File
@@ -57,6 +58,12 @@ module BrainDamage
     end
 
     def describe_field(name)
+      if @closed_for_field_description
+        puts "ERROR: Trying to describe field #{name} after field description has been closed.
+      Are you trying to describe a field after describing the views?"
+        return
+      end
+
       @fields[name] = Field.new(name: name, resource: self)
       yield @fields[name] if block_given?
 
@@ -74,6 +81,7 @@ module BrainDamage
     end
 
     def describe_views
+      ensure_every_column_is_described
       yield @views if block_given?
     end
 
@@ -96,6 +104,8 @@ module BrainDamage
           field.input = :default
         end
       end
+
+      @closed_for_field_description = true
     end
 
     def ensure_every_column_has_its_generated_attribute_object

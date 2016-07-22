@@ -7,9 +7,9 @@ module BrainDamage
 
         describe_view 'inline_edit/_inline_edit'
 
-        # resource.displayable_and_inputable_fields.each do |field|
-        #   descrive_view field.name, view_class_name: :field
-        # end
+        resource.displayable_and_inputable_fields.each do |field|
+          describe_view "inline_edit/_#{field.name}", view_class_name: 'InlineEdit::Field', field_name: field.name
+        end
       end
 
       def ensure_views_descriptions

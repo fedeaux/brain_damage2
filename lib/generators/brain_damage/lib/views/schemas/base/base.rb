@@ -13,7 +13,7 @@ module BrainDamage
         end
 
         def set_file_and_template_names(options)
-          @file_name = (options[:file_name] || infer_file_name)
+          @file_name = (options[:file_name] || infer_file_name) unless @file_name
           @template_file = (options[:template_name] || infer_file_name) unless @template_file
 
           unless self.class.has_template? @template_file
