@@ -5,10 +5,8 @@ module BrainDamage
         @resource = resource
         @views = {}
 
-        describe_view 'inline_edit/_inline_edit'
-
         resource.displayable_and_inputable_fields.each do |field|
-          describe_view "inline_edit/_#{field.name}", view_class_name: 'InlineEdit::Field', field_name: field.name
+          describe_view "inline_edit/_#{field.name}", view_class_name: 'InlineEdit::Field', field: field
         end
       end
 

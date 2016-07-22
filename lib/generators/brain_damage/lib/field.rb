@@ -20,12 +20,18 @@ module BrainDamage
 
       @name = args[:name]
       @resource = args[:resource]
+      @invisible = false
     end
 
     def invisible
       self.display = nil
       self.input = nil
       self.attr_white_list = ''
+      @invisible = true
+    end
+
+    def invisible?
+      @invisible
     end
 
     def relation= (options)

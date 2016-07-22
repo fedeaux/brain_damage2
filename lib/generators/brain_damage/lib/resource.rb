@@ -89,6 +89,10 @@ module BrainDamage
       fields.values.select(&:has_input?)
     end
 
+    def uninputable_fields
+      fields.values.reject(&:has_input?)
+    end
+
     def displayable_fields
       fields.values.select(&:has_display?)
     end
@@ -103,6 +107,10 @@ module BrainDamage
           field.display = :default
           field.input = :default
         end
+      end
+
+      uninputable_fields.each do |field|
+        field.input = :default unless field.invisible?
       end
 
       @closed_for_field_description = true

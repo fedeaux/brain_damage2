@@ -1,0 +1,37 @@
+- <%= singular_table_name %> ||= @<%= singular_table_name %>
+- prefix ||= '<%= singular_table_name %>'
+
+- inner_inline_edit_id = bd_id 'inline-edit-<%= singular_table_name %>'
+.brain-damage-with-hidden-actions.brain-damage-inline-edit{ id: inner_inline_edit_id, class: '<%= display_class %>' }
+  .brain-damage-inline-edit-display
+<% if field.display(:inline_editable_display) %>
+<%= field.display(:inline_editable_display).render.indent 2 %>
+<% else %>
+<%= field.display.render.indent 2 %>
+<% end %>
+
+<% if explicit_edit_action? %>
+    .line
+      %br
+      .ui.basic.tiny.icon.button.brain-damage-edit
+        = t('actions.edit')
+        %i.edit.icon
+
+<% else %>
+    .brain-damage-inline-edit-actions
+      %a.icon-wrapper
+        %i.brain-damage-inline-edit-edit.edit.icon
+<% end %>
+
+  .brain-damage-inline-edit-form.ui.segment
+    = form_for <%= singular_table_name %>, html: { class: 'ui form' }, remote: true, validate: true do |f|
+<%= field.input.render.indent 3 %>
+
+      %button.ui.small.icon.primary.button{ type: :submit }
+        %i.save.icon
+
+      .ui.small.basic.icon.button.brain-damage-inline-edit-cancel
+        %i.remove.icon
+
+  :coffeescript
+    new BrainDamage.InlineEdit "##{inner_inline_edit_id}", partial_to_show: "<%= plural_table_name %>/inline_edit/<%= field.name %>"

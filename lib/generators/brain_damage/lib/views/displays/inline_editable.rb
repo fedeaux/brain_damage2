@@ -10,7 +10,11 @@ module BrainDamage
           @if = options[:if] || nil
         end
 
-        def display(identifier = :default)
+        def conditions?
+          false
+        end
+
+        def display(identifier = :inline_editable_display)
           field.display identifier
         end
 
