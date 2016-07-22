@@ -1,5 +1,5 @@
 <% for field in displayable_fields -%>
 .field
   %label= <%= field.label[:text] %>
-<%= field.display.render.indent 1 %>
+<%= field.display(:list_item).render.indent 1 %>
 <% end -%>

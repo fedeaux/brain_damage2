@@ -90,6 +90,18 @@ module BrainDamage
       @labels[identifier] = options
     end
 
+    def map_display(identifier, *targets)
+      targets.each do |target|
+        @displays[target] = @displays[identifier]
+      end
+    end
+
+    def map_input(identifier, *targets)
+      targets.each do |target|
+        @inputs[target] = @inputs[identifier]
+      end
+    end
+
     def label(scope = :default)
       if @labels[scope]
         return @labels[scope]
@@ -101,15 +113,23 @@ module BrainDamage
         puts "ERROR: Unable to find label with scope [#{scope}]"
       end
 
-      label(:default)
+      label :default
     end
 
     def input(identifier = :default)
-      @inputs[identifier]
+      if @inputs[identifier]
+        @inputs[identifier]
+      else
+        input :default
+      end
     end
 
     def display(identifier = :default)
-      @displays[identifier]
+      if @displays[identifier]
+        @displays[identifier]
+      else
+        display :default
+      end
     end
 
     def field_type
