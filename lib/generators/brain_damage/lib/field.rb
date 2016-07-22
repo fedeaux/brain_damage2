@@ -48,6 +48,10 @@ module BrainDamage
       @field_white_list.list
     end
 
+    def inline_editable(options = {})
+      add_display :inline_editable, options
+    end
+
     def display=(options)
       add_display :default, options unless options == nil
     end

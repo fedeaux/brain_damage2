@@ -1,5 +1,6 @@
 Dir[File.dirname(__FILE__) + '/base/*.rb'].each {|file| require file }
 Dir[File.dirname(__FILE__) + '/single_page_manager/*.rb'].each {|file| require file }
+Dir[File.dirname(__FILE__) + '/inline_editable/*.rb'].each {|file| require file }
 
 module BrainDamage
   module ViewSchemas
@@ -46,7 +47,7 @@ module BrainDamage
 
         schema_class = self.class
 
-        view_class_name = name.gsub('/', '::').camelize
+        view_class_name = options[:view_class_name] || name.to_s.split('/').map(&:camelize).join('::')
 
         loop do
           specific_view_class_name = "BrainDamage::View::#{schema_class.name.demodulize}::#{view_class_name}"

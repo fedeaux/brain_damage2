@@ -77,6 +77,18 @@ module BrainDamage
       yield @views if block_given?
     end
 
+    def inputable_fields
+      fields.values.select(&:has_input?)
+    end
+
+    def displayable_fields
+      fields.values.select(&:has_display?)
+    end
+
+    def displayable_and_inputable_fields
+      inputable_fields & displayable_fields
+    end
+
     def ensure_every_column_is_described
       (@columns.keys - @fields.keys).each do |column_name|
         describe_field column_name do |field|

@@ -10,7 +10,9 @@ module BrainDamage
       end
 
       def self.overwrite?(file_name)
-        !File.exists?(file_name) or File.readlines(file_name).first.strip == OVERWRITEABLE_HEADER
+        !File.exists?(file_name) or
+          File.readlines(file_name).first.nil? or
+          File.readlines(file_name).first.strip == OVERWRITEABLE_HEADER
       end
 
       def render

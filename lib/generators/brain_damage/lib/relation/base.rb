@@ -6,6 +6,15 @@ module BrainDamage
       raise "class Relation is an abstract class and can't be instantiated"
     end
 
+    def resource_name_according_to_foreign
+      @options[:as] or @options[:inverse_of] or singular_table_name
+    end
+
+    def class_name
+      return @options[:class_name] if @options[:class_name]
+      @options[:field].name.to_s.singularize.camelize
+    end
+
     def model_lines
       []
     end
