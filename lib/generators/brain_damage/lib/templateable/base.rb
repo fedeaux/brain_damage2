@@ -21,7 +21,7 @@ module BrainDamage
       end
 
       def render_erb_string(string)
-        return Erubis::Eruby.new(string).result(binding).strip.gsub(/\n\n\n+/, "\n").gsub(/NEW_LINE_\d+/, "") if string.is_a? String
+        return Erubis::Eruby.new(string).result(binding).strip.gsub(/\n\n\n+/, "\n").gsub(/NEW_LINE_\d+/, "").split("\n").map(&:rstrip).join("\n") if string.is_a? String
         ''
       end
 
