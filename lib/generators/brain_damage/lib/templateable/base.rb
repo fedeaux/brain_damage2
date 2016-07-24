@@ -12,7 +12,8 @@ module BrainDamage
       def initialize(resource, options = {})
         @options = options
         @resource = resource
-        @template_file = "#{self.class.to_s.split('::').last.underscore}.html.haml" unless @template_file
+
+        @template_file = options[:template_file] || "#{self.class.to_s.split('::').last.underscore}.html.haml" unless @template_file
       end
 
       def render_erb_file(file)

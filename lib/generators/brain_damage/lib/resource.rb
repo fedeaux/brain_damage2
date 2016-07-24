@@ -86,7 +86,9 @@ module BrainDamage
     end
 
     def inputable_fields(identifier = :default)
-      fields.values.select{ |field| field.inputable? identifier }
+      sort_fields(fields.values.select{ |field|
+                    field.inputable? identifier
+                  })
     end
 
     def uninputable_fields
@@ -94,7 +96,17 @@ module BrainDamage
     end
 
     def displayable_fields(identifier = :default)
-      fields.values.select{ |field| field.displayable? identifier }
+      sort_fields(fields.values.select{ |field|
+                    field.displayable? identifier
+                  })
+    end
+
+    def sort_fields(fields)
+      names = @columns.keys
+      fields.sort { |field_a, field_b|
+        (names.index(field_a.name) || 999) <=>
+          (names.index(field_b.name) || 999)
+      }
     end
 
     def displayable_and_inputable_fields(identifier = :default)

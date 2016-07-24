@@ -1,0 +1,5 @@
+<% if options[:partial_options] %>
+= r '<%= options[:partial] %>', <%= options[:partial_options] %>
+<% else %>
+= r '<%= options[:partial] %>'
+<% end %>
