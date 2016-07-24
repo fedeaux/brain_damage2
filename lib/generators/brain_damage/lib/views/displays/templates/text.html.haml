@@ -1,9 +1,4 @@
-<% if include_existance_check? %>
-- if <%= target %>
+- if <%= target %> and <%= text %>.present?
   = <%= text %>
 - else
   = r "<%= empty_haml_path %>"
-
-<% else %>
-= <%= text %>
-<% end %>

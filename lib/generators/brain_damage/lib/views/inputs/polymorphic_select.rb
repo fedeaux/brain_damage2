@@ -1,10 +1,10 @@
 require 'erb'
-require_relative 'base'
+require_relative 'nested_on_hideable'
 
 module BrainDamage
   module View
     module Input
-      class PolymorphicSelect < Base
+      class PolymorphicSelect < NestedOnHideable
         def initialize(field, options)
           super
           @normalized_name = name.to_s.gsub('_id', '').gsub('_type', '')
@@ -26,18 +26,6 @@ module BrainDamage
 
         def types_options
           @options[:options]
-        end
-
-        def label_guard?
-          true
-        end
-
-        def label_guard
-          guard
-        end
-
-        def guard
-          render_erb_string '!defined? nested_on or nested_on.try(:to_sym) != :<%= name %>'
         end
       end
     end

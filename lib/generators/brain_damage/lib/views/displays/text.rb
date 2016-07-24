@@ -19,7 +19,7 @@ module BrainDamage
                  end
 
           return text if text.present?
-          link_target
+          target
         end
 
         def target

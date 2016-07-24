@@ -59,15 +59,15 @@ module BrainDamage
     end
 
     def display=(options)
-      add_display :default, options unless options == nil
+      add_display :default, options
     end
 
     def input=(options)
-      add_input :default, options unless options == nil
+      add_input :default, options
     end
 
     def label=(options)
-      add_label :default, options unless options == nil
+      add_label :default, options
     end
 
     def has_input?
@@ -89,11 +89,19 @@ module BrainDamage
     end
 
     def add_display(identifier, options)
-      @displays[identifier] = View::Factory.create :display, self, options
+      if options.nil?
+        @displays[identifier] = false
+      else
+        @displays[identifier] = View::Factory.create :display, self, options
+      end
     end
 
     def add_input(identifier, options)
-      @inputs[identifier] = View::Factory.create :input, self, options
+      if options.nil?
+        @inputs[identifier] = false
+      else
+        @inputs[identifier] = View::Factory.create :input, self, options
+      end
     end
 
     def add_label(identifier, options)
@@ -127,7 +135,7 @@ module BrainDamage
     end
 
     def input(identifier = :default)
-      if @inputs[identifier]
+      if @inputs.has_key? identifier
         @inputs[identifier]
       elsif identifier != :default
         input :default
@@ -135,7 +143,7 @@ module BrainDamage
     end
 
     def display(identifier = :default)
-      if @displays[identifier]
+      if @displays.has_key? identifier
         @displays[identifier]
       elsif identifier != :default
         display :default

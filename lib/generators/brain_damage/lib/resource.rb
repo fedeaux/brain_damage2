@@ -110,7 +110,7 @@ module BrainDamage
       end
 
       uninputable_fields.each do |field|
-        field.input = :default unless field.invisible?
+        field.input = :default unless field.input(:default) == false
       end
 
       @closed_for_field_description = true
