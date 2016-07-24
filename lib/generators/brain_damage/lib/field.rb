@@ -78,6 +78,16 @@ module BrainDamage
       @displays.values.reject(&:nil?).any?
     end
 
+    def inputable?(identifier = :default)
+      input = input identifier
+      input and input.show?
+    end
+
+    def displayable?(identifier = :default)
+      display = display identifier
+      display and display.show?
+    end
+
     def add_display(identifier, options)
       @displays[identifier] = View::Factory.create :display, self, options
     end
@@ -119,7 +129,7 @@ module BrainDamage
     def input(identifier = :default)
       if @inputs[identifier]
         @inputs[identifier]
-      else
+      elsif identifier != :default
         input :default
       end
     end
@@ -127,7 +137,7 @@ module BrainDamage
     def display(identifier = :default)
       if @displays[identifier]
         @displays[identifier]
-      else
+      elsif identifier != :default
         display :default
       end
     end

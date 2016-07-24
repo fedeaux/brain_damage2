@@ -1,6 +1,27 @@
-- <%= plural_table_name %> ||= @<%= plural_table_name %>
+- single_page_manager_table_id = "brain-damage-single-page-manager-table#{bd_id}"
 
-.ui.form.brain-damage-list
+- <%= plural_table_name %> ||= @<%= plural_table_name %>
+- <%= singular_table_name %>_prototype ||= <%= name %>.new
+
+- @single_page_manager_options ||= Hash.new(false)
+- @single_page_manager_options[:cancel_button] = true
+- @single_page_manager_options.merge!(single_page_manager_options) if defined? single_page_manager_options
+
+.ui.form.brain-damage-list{ id: single_page_manager_table_id }
   .brain-damage-list-header
+  - if @single_page_manager_options[:leading_form]
+    - @single_page_manager_options[:form_context] = :leading_form
+    = r "<%= plural_table_name %>/list/index.form", <%= singular_table_name %>: <%= singular_table_name %>_prototype
+
   - <%= plural_table_name %>.each do |<%= singular_table_name %>|
     = r "<%= plural_table_name %>/list/item", <%= singular_table_name %>: <%= singular_table_name %>
+
+  - if @single_page_manager_options[:trailing_form]
+    - @single_page_manager_options[:form_context] = :trailing_form
+    = r "<%= plural_table_name %>/list/index.form", <%= singular_table_name %>: <%= singular_table_name %>_prototype
+
+  - @single_page_manager_options[:form_context] = nil
+
+  - unless @single_page_manager_options[:single_page_manager_script_duplicate_guard]
+    :javascript
+      new BrainDamage.SinglePageManager("##{single_page_manager_table_id}");

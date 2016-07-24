@@ -1,5 +1,5 @@
 %tr
-<% for field in displayable_fields -%>
+<% for field in displayable_fields(:table_item) -%>
   %td
 <%= field.display(:table_item).render.indent 2 %>
 <% end -%>

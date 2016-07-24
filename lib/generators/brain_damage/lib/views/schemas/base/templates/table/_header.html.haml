@@ -1,5 +1,5 @@
 %thead
   %tr
-<% for field in displayable_fields -%>
+<% for field in displayable_fields(:table_item) -%>
     %th= <%= field.label[:text] %>
 <% end -%>

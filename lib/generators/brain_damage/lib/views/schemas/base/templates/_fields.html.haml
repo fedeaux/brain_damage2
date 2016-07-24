@@ -4,7 +4,15 @@
   = f.hidden_field :id, {name: name_for_input_tag(:id, prefix)}
 
 <% for field in inputable_fields -%>
+<% if field.input.label_guard? %>
+- if <%= field.input.label_guard %>
+  .field
+    %label= <%= field.label[:text] %>
+<% elsif field.input.show_label? %>
 .field
   %label= <%= field.label[:text] %>
+<% else %>
+.field
+<% end %>
 <%= field.input.render.indent 1 %>
 <% end -%>

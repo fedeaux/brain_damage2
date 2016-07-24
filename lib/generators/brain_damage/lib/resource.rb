@@ -85,20 +85,20 @@ module BrainDamage
       yield @views if block_given?
     end
 
-    def inputable_fields
-      fields.values.select(&:has_input?)
+    def inputable_fields(identifier = :default)
+      fields.values.select{ |field| field.inputable? identifier }
     end
 
     def uninputable_fields
-      fields.values.reject(&:has_input?)
+      fields.values.reject(&:inputable?)
     end
 
-    def displayable_fields
-      fields.values.select(&:has_display?)
+    def displayable_fields(identifier = :default)
+      fields.values.select{ |field| field.displayable? identifier }
     end
 
-    def displayable_and_inputable_fields
-      inputable_fields & displayable_fields
+    def displayable_and_inputable_fields(identifier = :default)
+      inputable_fields(identifier) & displayable_fields(identifier)
     end
 
     def ensure_every_column_is_described

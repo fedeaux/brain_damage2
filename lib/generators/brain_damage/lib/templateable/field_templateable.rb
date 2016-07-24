@@ -21,6 +21,18 @@ module BrainDamage
       def method_missing(method, *args, &block)
         @field.send method, *args, &block
       end
+
+      def label_guard?
+        false
+      end
+
+      def show_label?
+        true
+      end
+
+      def show?
+        true
+      end
     end
   end
 end

@@ -2,7 +2,7 @@
 
 .ui.form
 
-<% for field in displayable_fields -%>
+<% for field in displayable_fields(:show) -%>
   .field
     %label= <%= field.label[:text] %>
 <%= field.display(:show).render.indent 2 %>
