@@ -23,7 +23,6 @@ module BrainDamage
 
     def self.start(args, config)
       self.resource = get_resource_description args
-      resource.root = resource_root
 
       args = resource.parametizer.as_cmd_parameters + ['--force', '--no-test-framework', '--no-routes'] # always force views
       @ignore_migration = self.resource.migration.skip?
@@ -80,7 +79,7 @@ module BrainDamage
     protected
     def self.get_resource_description(args)
       initializers = [get_base_file, get_description_file_from_args(args)].reject(&:nil?)
-      BrainDamage::Resource.new initializers
+      BrainDamage::Resource.new initializers, { root: resource_root }
     end
 
     def self.get_base_file

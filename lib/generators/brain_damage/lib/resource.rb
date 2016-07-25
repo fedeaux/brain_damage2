@@ -4,8 +4,8 @@ require_relative 'includes'
 module BrainDamage
   class Resource
     attr_accessor :name
-    attr_accessor :root
 
+    attr_reader :root
     attr_reader :columns
     attr_reader :controller
     attr_reader :fields
@@ -14,9 +14,10 @@ module BrainDamage
     attr_reader :migration
     attr_reader :parametizer
 
-    def initialize(initializers)
+    def initialize(initializers, options = {})
       @columns = {}
       @fields = {}
+      @root = options[:root]
 
       @parametizer = BrainDamage::Parametizer.new self
       @migration = BrainDamage::Migration.new self
