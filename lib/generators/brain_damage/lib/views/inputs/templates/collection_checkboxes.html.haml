@@ -1,0 +1,6 @@
+.field.collection-check-boxes
+  = f.collection_check_boxes(:<%= options[:name] || name %>, <%= options[:model] %>.all, :<%= options[:value] %>, :<%= options[:display_method] %>) do |b|
+    .ui.fluid.basic.label.with-checkbox
+      .ui.fluid.checkbox
+        = b.check_box
+        = b.label

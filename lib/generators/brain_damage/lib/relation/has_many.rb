@@ -27,6 +27,8 @@ module BrainDamage
     def white_list
       if @options[:white_list]
         return ":#{@name.to_s.pluralize}_attributes => #{@options[:white_list].inspect}"
+      else
+        return ":#{@name.to_s.singularize}_ids => []"
       end
     end
   end
