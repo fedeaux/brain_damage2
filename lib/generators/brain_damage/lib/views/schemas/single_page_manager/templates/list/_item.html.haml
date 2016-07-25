@@ -9,21 +9,22 @@
 - @single_page_manager_options[:nested_on] = nested_on if defined? nested_on
 
 .brain-damage-list-item-wrapper
-  = r "<%= plural_table_name %>/list/item.display", <%= singular_table_name %>: <%= singular_table_name %>
+  .brain-damage-list-item
+    = r "<%= plural_table_name %>/list/item.display", <%= singular_table_name %>: <%= singular_table_name %>
 
-  .brain-damage-actions-wrapper
-    .brain-damage-actions.ui.mini.transparent.icon.buttons
-      - if
-        = link_to <%= singular_table_name %>, class: 'ui button' do
-          %i.eye.icon
+    .brain-damage-actions-wrapper
+      .brain-damage-actions.ui.mini.transparent.icon.buttons
+        - if
+          = link_to <%= singular_table_name %>, class: 'ui button' do
+            %i.eye.icon
 
-      - if <%= editable_guard %>
-        %a.ui.button
-          %i.brain-damage-edit.edit.icon
+        - if <%= editable_guard %>
+          %a.ui.button
+            %i.brain-damage-edit.edit.icon
 
-      - if <%= deletable_guard %>
-        = link_to <%= singular_table_name %>, method: :delete, remote: true, data: { confirm: t('actions.confirm_delete') }, class: 'brain-damage-delete ui button' do
-          %i.trash.icon
+        - if <%= deletable_guard %>
+          = link_to <%= singular_table_name %>, method: :delete, remote: true, data: { confirm: t('actions.confirm_delete') }, class: 'brain-damage-delete ui button' do
+            %i.trash.icon
 
   - if <%= editable_guard %>
     .brain-damage-edit-list-item

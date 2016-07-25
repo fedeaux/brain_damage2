@@ -1,9 +1,9 @@
 - if <%= guard %>
   .field
-    = f.collection_select('<%= options[:name] || name %>_id', <%= options[:model] %>.all, :<%= options[:value] %>, :<%= options[:display_method] %>)
+    = f.collection_select('<%= options[:name] || name %>_id', <%= options[:model] %>.all, :<%= options[:value] %>, :<%= options[:display_method] %>, <%= tag_options %>)
 
 - else
   = hidden_field_tag('partial_locals[nested_on]', nested_on)
 
   - if nested_on.try(:to_sym) == :<%= name %> and <%= singular_table_name %>.<%= name %>
-    = f.hidden_field('<%= options[:name] || name %>_id', value: <%= singular_table_name %>.<%= name %>.id )
+    = f.hidden_field('<%= options[:name] || name %>_id %>', <%= tag_options(value: "#{singular_table_name}.#{name}.id") %>)

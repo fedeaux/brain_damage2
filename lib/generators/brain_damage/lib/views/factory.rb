@@ -14,7 +14,7 @@ module BrainDamage
         type = type.to_s
         subtype = subtype.to_s
 
-        if File.exists? "#{type.pluralize}/#{subtype}"
+        if File.exists?  __dir__+"/#{type.pluralize}/#{subtype}.rb"
           require_relative "#{type.pluralize}/#{subtype}"
           eval("#{type.camelize.singularize}::#{subtype.camelize}").new field, options
 

@@ -10,6 +10,10 @@ module BrainDamage
       @options[:as] or @options[:inverse_of] or singular_table_name
     end
 
+    def nested_on
+      resource_name_according_to_foreign
+    end
+
     def class_name
       return @options[:class_name] if @options[:class_name]
       @options[:field].name.to_s.singularize.camelize

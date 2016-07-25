@@ -1,0 +1,33 @@
+- new_line_prefix = "#{prefix}[<%= plural_table_name %>_attributes][0]"
+- edit_line_prefix = "#{prefix}[<%= plural_table_name %>_attributes][$id]"
+
+- id = bd_id 'brain-damage-nested-form'
+- prototype_id = bd_id 'brain-damage-nested-form-prototype'
+- skip_nested_fields_controls ||= false
+- <%= plural_table_name %> ||= []
+
+%div{ :id => id }
+  - unless skip_nested_fields_controls
+    .ui.basic.mini.fluid.button.brain-damage-nested-form-add-button
+      %i.add.icon
+      = cet('actions.add')
+
+  - <%= plural_table_name %>.each do |edit_<%= singular_table_name %>|
+    .brain-damage-nested-form-line.brain-damage-nested-form-edit-line
+      - unless skip_nested_fields_controls
+        = link_to p, method: :delete, remote: true, data: { confirm: t('actions.confirm_nested_delete') }, class: 'brain-damage-nested-form-destroy-button brain-damage-delete' do
+          %i.trash.icon
+
+      = f.fields_for edit_<%= singular_table_name %> do |f|
+        = r "parts/fields", f: f, prefix: edit_line_prefix.gsub('$id', edit_<%= singular_table_name %>.id.to_s), part: edit_<%= singular_table_name %>, nested_on: nested_on
+
+  .brain-damage-nested-form-line.brain-damage-nested-form-prototype{ id: prototype_id }
+    - unless skip_nested_fields_controls
+      .ui.mini.red.icon.button.brain-damage-nested-form-remove-button
+        %i.remove.icon
+
+    = fields_for <%= singular_table_name %> do |f|
+      = r "<%= plural_table_name %>/fields", f: f, prefix: new_line_prefix, <%= singular_table_name %>: <%= singular_table_name %>, nested_on: nested_on
+
+  :coffeescript
+    new BrainDamage.NestedFormControls "##{id}", { prototype_selector: "##{prototype_id}" }

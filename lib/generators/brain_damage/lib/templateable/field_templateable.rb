@@ -33,6 +33,10 @@ module BrainDamage
       def show?
         true
       end
+
+      def render
+        super
+      end
     end
   end
 end

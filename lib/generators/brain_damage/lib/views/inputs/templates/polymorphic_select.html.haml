@@ -4,11 +4,11 @@
   .field{ id: polymorphic_select_input_id }
     .ui.two.fields
       .field
-        = f.select(:<%= type_select_name %>, [<%= options_for_type %>], {}, { class: 'polymorphic-select-type-selector' })
+        = f.select(:<%= type_select_name %>, [<%= options_for_type %>], {}, <%= tag_options(class: '"polymorphic-select-type-selector"') %>)
 
   <% types_options.each do |options| %>
       .field{ class: "polymorphic-select-object-selector-wrapper polymorphic-select-object-selector-<%= options[:model] %>-wrapper" }
-        = f.collection_select(:<%= object_select_name %>, <%= options[:model] %>.all, :<%= options[:value] %>, :<%= options[:display_method] %>)
+        = f.collection_select(:<%= object_select_name %>, <%= options[:model] %>.all, :<%= options[:value] %>, :<%= options[:display_method] %>, <%= tag_options %>)
   <% end %>
 
     :coffeescript
@@ -18,5 +18,5 @@
   = hidden_field_tag('partial_locals[nested_on]', nested_on)
 
   - if nested_on.try(:to_sym) == :<%= name %> and <%= singular_table_name %>.<%= name %>
-    = f.hidden_field(:<%= type_select_name %>, value: <%= singular_table_name %>.<%= type_select_name %> )
-    = f.hidden_field(:<%= object_select_name %>, value: <%= singular_table_name %>.<%= object_select_name %> )
+    = f.hidden_field(:<%= type_select_name %>, <%= tag_options(value: "#{singular_table_name}.#{type_select_name}", name: "name_for_input_tag(:#{type_select_name}, prefix)") %>)
+    = f.hidden_field(:<%= object_select_name %>, <%= tag_options(value: "#{singular_table_name}.#{object_select_name}", name: "name_for_input_tag(:#{object_select_name}, prefix)") %>)

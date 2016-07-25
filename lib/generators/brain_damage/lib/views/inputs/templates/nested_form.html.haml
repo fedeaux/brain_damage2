@@ -1,0 +1,2 @@
+.field
+  = r "<%= nested_plural_table_name %>/nested.fields", f: f, <%= nested_singular_table_name %>: <%= nested_model_class_name %>.new(<%= nested_on %>: <%= singular_table_name %>), prefix: "<%= singular_table_name %>", nested_on: :<%= nested_on %>, <%= nested_plural_table_name %>: <%= singular_table_name %>.<%= nested_plural_table_name %>

@@ -1,11 +1,6 @@
 module BrainDamage
   module ViewSchemas
-    class SinglePageManager < Base
-      def initialize(resource)
-        super
-        describe_view '_form', { remote: true }
-      end
-
+    class NestedFields < Base
       private
       def self.dir
         __dir__

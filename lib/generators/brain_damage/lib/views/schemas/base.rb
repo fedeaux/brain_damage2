@@ -1,6 +1,7 @@
 Dir[File.dirname(__FILE__) + '/base/*.rb'].each {|file| require file }
 Dir[File.dirname(__FILE__) + '/single_page_manager/*.rb'].each {|file| require file }
 Dir[File.dirname(__FILE__) + '/inline_editable/*.rb'].each {|file| require file }
+Dir[File.dirname(__FILE__) + '/nested_fields/*.rb'].each {|file| require file }
 
 module BrainDamage
   module ViewSchemas
@@ -20,6 +21,7 @@ module BrainDamage
 
         loop do
           path = File.join(dir, schema_class.name.demodulize.underscore, 'templates/')
+
           @views_names += Dir.glob(path + '**/*' ).select{ |name|
             name =~ /html.haml$/
           }.map{ |name|
@@ -47,7 +49,7 @@ module BrainDamage
 
         schema_class = self.class
 
-        view_class_name = options[:view_class_name] || name.to_s.split('/').map(&:camelize).join('::')
+        view_class_name = options[:view_class_name] || name.to_s.split('/').map{ |part| part.gsub('.', '_').camelize }.join('::')
 
         loop do
           specific_view_class_name = "BrainDamage::View::#{schema_class.name.demodulize}::#{view_class_name}"
