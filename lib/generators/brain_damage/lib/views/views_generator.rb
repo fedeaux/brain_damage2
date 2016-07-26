@@ -7,6 +7,8 @@ module BrainDamage
       @schemas = []
       @views = {}
       @resource = resource
+
+      add_schema :custom
     end
 
     def generate
@@ -18,7 +20,9 @@ module BrainDamage
       yield schema if block_given?
       schema.ensure_views_descriptions
 
-      @views.merge! schema.views
+      schema.views.each do |name, object|
+        @views[name] = object unless @views[name]
+      end
     end
 
     def views

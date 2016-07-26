@@ -1,5 +1,7 @@
 require 'erb'
 require 'erubis'
+require 'pathname'
+
 require_relative '../ruby_simple_parser/parser'
 
 module BrainDamage
@@ -27,7 +29,11 @@ module BrainDamage
       end
 
       def render_template_file(template_file = @template_file)
-        render_erb_file "#{dir}/templates/#{template_file}"
+        if Pathname.new(template_file).absolute?
+          render_erb_file template_file
+        else
+          render_erb_file "#{dir}/templates/#{template_file}"
+        end
       end
 
       def render(template_file = @template_file)

@@ -4,6 +4,6 @@
 
 <% for field in displayable_fields(:show) -%>
   .field
-    %label= <%= field.label[:text] %>
+    %label= <%= field.label.text %>
 <%= field.display(:show).render.indent 2 %>
 <% end -%>

@@ -9,10 +9,9 @@ module BrainDamage
       attr_reader :views
 
       def initialize(resource)
-        find_views_names
-
         @views = {}
         @resource = resource
+        find_views_names
       end
 
       def find_views_names
@@ -53,17 +52,18 @@ module BrainDamage
 
         loop do
           specific_view_class_name = "BrainDamage::View::#{schema_class.name.demodulize}::#{view_class_name}"
-
+          #puts specific_view_class_name
           if Object.const_defined? specific_view_class_name
             @views[name] = eval(specific_view_class_name).new @resource, options
             break
           end
 
           base_view_class_name = "BrainDamage::View::#{schema_class.name.demodulize}::Base"
+          #puts base_view_class_name
           if Object.const_defined? base_view_class_name
             klass = eval base_view_class_name
 
-            if klass.has_template? name
+            if (options[:template_name] and Pathname.new(options[:template_name]).absolute?) or klass.has_template? name
               options[:file_name] = "#{name}.html.haml" unless options[:file_name]
               options[:template_name] = "#{name}.html.haml" unless options[:template_name]
               @views[name] = eval(base_view_class_name).new @resource, options

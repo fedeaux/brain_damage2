@@ -2,18 +2,18 @@ module BrainDamage
   module ResourceHelpers
     attr_accessor :default_indentation
 
-    def display_attributes(attributes, options = {})
+    def display_field_names(field_names, options = {})
       options = {
         indentation: default_indentation,
         join: "\n"
       }.merge options
 
-      attributes.map { |attribute|
-        display_attribute(attribute, options[:indentation])
+      field_names.map { |field_name|
+        display_for(field_name, options[:indentation])
       }.join options[:join]
     end
 
-    def display_attribute(attribute, options = {})
+    def display_for(field_name, options = {})
       indentation = default_indentation
 
       if options.is_a? Numeric
@@ -24,17 +24,25 @@ module BrainDamage
         options.delete :indentation
       end
 
-      indent_or_die @resource.display_attribute(attribute, options), indentation
+      options[:identifier] ||= :default
+
+      indent_or_die @resource.fields[field_name].display(options[:identifier]).render, indentation
     end
 
-    def input_for(attribute, indentation = default_indentation, &block)
+    def input_for(field_name, indentation = default_indentation, &block)
       args = {}
 
       if block_given?
         args[:encapsulated_block] = encapsulate_block_in_view_context(&block)
       end
 
-      indent_or_die @resource.input_for(attribute, args), indentation
+      indent_or_die @resource.fields[field_name].input.render, indentation
+    end
+
+    def input_with_label_for(field_name, indentation = default_indentation)
+
+      inner_html = [@resource.fields[field_name].label.render, @resource.fields[field_name].input.render].join "\n"
+      indent_or_die inner_html, indentation
     end
 
     def indent_or_die(html, indentation = default_indentation)

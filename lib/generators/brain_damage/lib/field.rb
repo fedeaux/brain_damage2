@@ -105,7 +105,11 @@ module BrainDamage
     end
 
     def add_label(identifier, options)
-      @labels[identifier] = options
+      if options.nil?
+        @labels[identifier] = false
+      else
+        @labels[identifier] = View::Factory.create :label, self, options
+      end
     end
 
     def map_display(identifier, *targets)
@@ -125,7 +129,7 @@ module BrainDamage
         return @labels[scope]
 
       elsif scope == :default
-        self.label = { text: render_erb_string("cet('<%= singular_table_name %>.<%= name %>')") }
+        self.label = :default
 
       else
         puts "ERROR: Unable to find label with scope [#{scope}]"

@@ -5,11 +5,6 @@
 
 <% for field in inputable_fields -%>
 .field
-<% if field.input.label_guard? %>
-  - if <%= field.input.label_guard %>
-    %label= <%= field.label[:text] %>
-<% elsif field.input.show_label? %>
-  %label= <%= field.label[:text] %>
-<% end %>
+<%= field.label.render.indent 1 %>
 <%= field.input.render.indent 1 %>
 <% end -%>

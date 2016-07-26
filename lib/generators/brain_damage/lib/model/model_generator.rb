@@ -80,8 +80,6 @@ module BrainDamage
       }.map { |pair|
         [pair.first, add_options_to_belongs_to_line(pair.second) ]
       }.each { |pair|
-        puts pair.inspect unless @parser.class_method_calls[:after_class_definition][pair.first].respond_to? :line
-
         @parser.class_method_calls[:after_class_definition][pair.first].line = pair.second
       }
     end
