@@ -40,9 +40,17 @@ module BrainDamage
     end
 
     def input_with_label_for(field_name, indentation = default_indentation)
-
       inner_html = [@resource.fields[field_name].label.render, @resource.fields[field_name].input.render].join "\n"
       indent_or_die inner_html, indentation
+    end
+
+    def display_with_label_for(field_name, indentation = default_indentation, context = :default)
+      inner_html = [@resource.fields[field_name].label(context).render, @resource.fields[field_name].display(context).render].join "\n"
+      indent_or_die inner_html, indentation
+    end
+
+    def label_text_for(field_name)
+      @resource.fields[field_name].label.text
     end
 
     def indent_or_die(html, indentation = default_indentation)

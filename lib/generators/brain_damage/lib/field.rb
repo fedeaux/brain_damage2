@@ -131,8 +131,6 @@ module BrainDamage
       elsif scope == :default
         self.label = :default
 
-      else
-        puts "ERROR: Unable to find label with scope [#{scope}]"
       end
 
       label :default
