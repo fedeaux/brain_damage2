@@ -36,12 +36,22 @@ module BrainDamage
         args[:encapsulated_block] = encapsulate_block_in_view_context(&block)
       end
 
-      indent_or_die @resource.fields[field_name].input.render, indentation
+      unless @resource.fields[field_name]
+        puts "ERROR: can't find #{field_name}"
+        return ''
+      else
+        indent_or_die @resource.fields[field_name].input.render, indentation
+      end
     end
 
     def input_with_label_for(field_name, indentation = default_indentation)
-      inner_html = [@resource.fields[field_name].label.render, @resource.fields[field_name].input.render].join "\n"
-      indent_or_die inner_html, indentation
+      unless @resource.fields[field_name]
+        puts "ERROR: can't find field #{field_name}"
+        return ''
+      else
+        inner_html = [@resource.fields[field_name].label.render, @resource.fields[field_name].input.render].join "\n"
+        indent_or_die inner_html, indentation
+      end
     end
 
     def display_with_label_for(field_name, indentation = default_indentation, context = :default)
