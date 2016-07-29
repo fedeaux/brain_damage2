@@ -1,0 +1,20 @@
+- autocomplete_wrapper_id = bd_id 'autocomplete-wrapper'
+
+.autocomplete-wrapper{ id: autocomplete_wrapper_id }
+  .autocomplete-itens-collection-wrapper
+
+  .ui.icon.input.autocomplete-query-wrapper
+    = text_field_tag nil, nil, class: 'autocomplete-query', autocomplete: 'off', placeholder: cet('common.start_search')
+    %i.search.icon
+
+  .ui.blue.icon.fluid.label.autocomplete-display.autocomplete-display-prototype{ style: 'display: none' }
+    %i.ui.trash.icon.autocomplete-list-remove
+    %span.autocomplete-display-text
+    = hidden_field_tag '<%= input_name %>', nil, class: 'autocomplete-value'
+
+  .ui.segment.autocomplete-results-wrapper
+    %ul.autocomplete-results
+
+  - values = <%= values %>
+  :coffeescript
+    new BrainDamage.AutocompleteList('##{autocomplete_wrapper_id}', '<%= url %>', #{values}, '<%= partial_to_show %>')

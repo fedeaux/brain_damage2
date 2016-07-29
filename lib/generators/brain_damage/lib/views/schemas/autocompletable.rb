@@ -11,6 +11,11 @@ module BrainDamage
                         template_name: '_simple_selection.html.haml',
                         file_name: 'autocompletable/_simple_selection.html.haml'
 
+          describe_view "autocompletable/_multiple_selection",
+                        view_class_name: 'Base',
+                        template_name: '_multiple_selection.html.haml',
+                        file_name: 'autocompletable/_multiple_selection.html.haml'
+
         end
       end
 
