@@ -2,6 +2,7 @@ Dir[File.dirname(__FILE__) + '/base/*.rb'].each {|file| require file }
 Dir[File.dirname(__FILE__) + '/single_page_manager/*.rb'].each {|file| require file }
 Dir[File.dirname(__FILE__) + '/inline_editable/*.rb'].each {|file| require file }
 Dir[File.dirname(__FILE__) + '/nested_fields/*.rb'].each {|file| require file }
+Dir[File.dirname(__FILE__) + '/autocompletable/*.rb'].each {|file| require file }
 
 module BrainDamage
   module ViewSchemas
@@ -52,7 +53,6 @@ module BrainDamage
 
         loop do
           specific_view_class_name = "BrainDamage::View::#{schema_class.name.demodulize}::#{view_class_name}"
-          #puts specific_view_class_name
           if Object.const_defined? specific_view_class_name
             @views[name] = eval(specific_view_class_name).new @resource, options
             break

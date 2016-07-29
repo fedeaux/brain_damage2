@@ -1,0 +1,25 @@
+- autocomplete_wrapper_id = bd_id 'autocomplete-wrapper'
+
+- if !defined? nested_on or nested_on.try(:to_sym) != :<%= name %>
+  .autocomplete-wrapper{ id: autocomplete_wrapper_id }
+    .ui.icon.input.autocomplete-query-wrapper
+      = text_field_tag nil, nil, class: 'autocomplete-query', autocomplete: 'off', placeholder: cet('common.start_search')
+      %i.search.icon
+
+    = hidden_field_tag '<%= input_name %>', nil, class: 'autocomplete-value'
+
+    .ui.fluid.blue.icon.label.autocomplete-display{ style: 'display: none' }
+      %i.ui.edit.icon.autocomplete-edit
+      %span.autocomplete-display-text
+
+    .ui.segment.autocomplete-results-wrapper
+      %ul.autocomplete-results
+
+    :coffeescript
+      new BrainDamage.AutocompleteSimpleSelect('##{autocomplete_wrapper_id}', '<%= url %>', <%= value %>, '<%= partial_to_show %>')
+
+- else
+  = hidden_field_tag('partial_locals[nested_on]', nested_on)
+
+  - if <%= singular_table_name %>.<%= name %>
+    = hidden_field_tag( '<%= name %>', <%= singular_table_name %>.<%= name %>.id )

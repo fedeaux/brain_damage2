@@ -20,7 +20,6 @@
   display: inline-block
   min-height: 1em
   position: relative
-  padding-right: 2.25em
 
   .field
     label.input-label
@@ -31,13 +30,19 @@
       label.input-label
         display: block
 
+  .brain-damage-inline-edit-actions
+    display: none
+
   .brain-damage-inline-edit-display
     &:hover
+      padding-right: 2.25em
+
       +smooth-transition
       background-color: rgba(0, 0, 255, 0.15)
 
       .brain-damage-inline-edit-actions
         opacity: 1
+        display: inline
 
 .brain-damage-single-page-manager-index-form-with-hidden-add
   .brain-damage-show
