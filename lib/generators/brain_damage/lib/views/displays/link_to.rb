@@ -11,9 +11,9 @@ module BrainDamage
           @target_method = options[:target_method] || name
 
           if options[:act_as_foreign]
-            self.class.send(:define_method, :foreign?) do
+            define_singleton_method :foreign?, lambda {
               true
-            end
+            }
           end
         end
 
