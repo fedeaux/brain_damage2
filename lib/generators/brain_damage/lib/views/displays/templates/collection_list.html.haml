@@ -1,6 +1,10 @@
 - content_for :collecion_list_items, flush: true do
+<% if item_class %>
   - <%= singular_table_name %>.<%= name %>.each do |item|
-    .ui.basic.label{ class: '<%= item_class %>' }= item.<%= options[:display_method] %>
+    %div{ class: '<%= item_class %>' }= item.<%= options[:display_method] %>
+<% else %>
+  %div= <%= singular_table_name %>.<%= name %>.map(&:<%= options[:display_method] %>).join(', ')
+<% end %>
 
 .brain-damage-collection-list{ class: '<%= display_class %>' }
   - if <%= singular_table_name %>.<%= name %>.any?
@@ -12,7 +16,12 @@
       .collapsible-content
         .header= "#{<%= singular_table_name %>.<%= name %>.first.<%= options[:display_method] %>} +#{<%= singular_table_name %>.<%= name %>.count-1}"
         .content
-          = yield :collecion_list_items
+<% if item_class %>
+          - <%= singular_table_name %>.<%= name %>.each do |item|
+            %div{ class: '<%= item_class %>' }= item.<%= options[:display_method] %>
+<% else %>
+          %div= <%= singular_table_name %>.<%= name %>.map(&:<%= options[:display_method] %>).join('<br />').html_safe
+<% end %>
 
 <% else %>
     = yield :collecion_list_items

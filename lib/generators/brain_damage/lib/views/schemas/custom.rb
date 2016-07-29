@@ -8,7 +8,7 @@ module BrainDamage
       end
 
       def ensure_views_descriptions
-        if File.directory? @resource.root
+        if @resource.root and File.directory? @resource.root
           custom_views = Dir[ File.join(@resource.root, 'views/**/*') ].select { |file|
             file =~ /\.html\.haml/
           }.map { |file|

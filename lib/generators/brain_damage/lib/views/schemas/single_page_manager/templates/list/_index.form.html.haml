@@ -4,14 +4,14 @@
 - @single_page_manager_options ||= Hash.new(false)
 - @single_page_manager_options[:cancel_button] = true
 
-%div{id: table_form_id}
+.brain-damage-single-page-manager-index-form{id: table_form_id}
   - if @single_page_manager_options[:explicit_form]
     .brain-damage-hideable-content.brain-damage-add-form-wrapper
       = r '<%= plural_table_name %>/form', <%= singular_table_name %>: <%= singular_table_name %>
 
   - else
-    .brain-damage-show{colspan: 99}
-      .ui.basic.small.button.brain-damage-show= cet 'actions.add'
+    .ui.basic.small.icon.button.brain-damage-show
+      %i.add.icon
 
     .brain-damage-hideable-content.brain-damage-add-form-wrapper{ colspan: 99, style: 'display: none' }
       = r '<%= plural_table_name %>/form', <%= singular_table_name %>: <%= singular_table_name %>

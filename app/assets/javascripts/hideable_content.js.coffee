@@ -22,4 +22,4 @@ class @BrainDamage.HideableContent
 
   hide: =>
     @hideable.hide()
-    @show_button.fadeIn()
+    @show_button.css 'display', ''

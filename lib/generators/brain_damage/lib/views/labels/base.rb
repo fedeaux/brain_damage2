@@ -13,6 +13,10 @@ module BrainDamage
           @text = options[:text]
         end
 
+        def rendered_text
+          render_erb_string text
+        end
+
         def dir
           __dir__
         end

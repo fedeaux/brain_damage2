@@ -1,0 +1,20 @@
+- if <%= singular_table_name %>.<%= name %>
+  - local_value = { value: <%= singular_table_name %>.<%= name %>.id, display: <%= singular_table_name %>.<%= name %>.name }
+- else
+  - local_value = 'null'
+
+- label ||= nil
+- root_id ||= Local::ABSOLUTE_ROOT_ID
+
+.local-input
+  - id = bd_id "local-input"
+  - input_name = "<%= singular_table_name %>[<%= name %>_id]"
+
+  %label{:class => ['ui fluid left icon button basic']}
+    %i.search.icon
+    = label
+
+  = hidden_field_tag(input_name, nil, :id => id)
+
+  :javascript
+    new Hierarchy.Input("##{id}", { root_id: #{root_id}, value: #{local_value.to_json} });

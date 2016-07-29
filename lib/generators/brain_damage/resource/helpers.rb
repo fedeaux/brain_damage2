@@ -14,19 +14,29 @@ module BrainDamage
     end
 
     def display_for(field_name, options = {})
-      indentation = default_indentation
-
-      if options.is_a? Numeric
-        indentation = options
-        options = {}
-      elsif options.has_key? :indentation
-        indentation = options[:indentation]
-        options.delete :indentation
-      end
+      indentation = options[:indentation] || default_indentation
+      options = options.except :indentation
 
       options[:identifier] ||= :default
 
       indent_or_die @resource.fields[field_name].display(options[:identifier]).render, indentation
+    end
+
+    def label_for(field_name, options = {})
+      indentation = options[:indentation] || default_indentation
+      options = options.except :indentation
+
+      options[:identifier] ||= :default
+
+      indent_or_die @resource.fields[field_name].label(options[:identifier]).render, indentation
+    end
+
+    def display_with_label_for(field_name, options = {})
+      indentation = options[:indentation] || default_indentation
+      options[:indentation] = 0
+
+      inner_html = [label_for(field_name, options), display_for(field_name, options)].join "\n"
+      indent_or_die inner_html, indentation
     end
 
     def input_for(field_name, indentation = default_indentation, &block)
@@ -37,7 +47,7 @@ module BrainDamage
       end
 
       unless @resource.fields[field_name]
-        puts "ERROR: can't find #{field_name}"
+        puts "ERROR: can't find field #{field_name}"
         return ''
       else
         indent_or_die @resource.fields[field_name].input.render, indentation
@@ -54,13 +64,9 @@ module BrainDamage
       end
     end
 
-    def display_with_label_for(field_name, indentation = default_indentation, context = :default)
-      inner_html = [@resource.fields[field_name].label(context).render, @resource.fields[field_name].display(context).render].join "\n"
-      indent_or_die inner_html, indentation
-    end
-
-    def label_text_for(field_name)
-      @resource.fields[field_name].label.text
+    def label_text_for(field_name, options = {})
+      options[:context] ||= :default
+      @resource.fields[field_name].label(options[:context]).rendered_text
     end
 
     def indent_or_die(html, indentation = default_indentation)

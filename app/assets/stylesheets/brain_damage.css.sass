@@ -17,8 +17,10 @@
   text-transform: uppercase
 
 .brain-damage-inline-edit, .polymorphic-hybrid-input-wrapper
-  display: block
+  display: inline-block
+  min-height: 1em
   position: relative
+  padding-right: 2.25em
 
   .field
     label.input-label
@@ -36,6 +38,14 @@
 
       .brain-damage-inline-edit-actions
         opacity: 1
+
+.brain-damage-single-page-manager-index-form-with-hidden-add
+  .brain-damage-show
+    display: none
+
+  &:hover
+    .brain-damage-show
+      display: block
 
 td, .field
   .brain-damage-inline-edit
@@ -151,9 +161,11 @@ pre.preformatted
 
   .content
     +box-shadow
+    background-color: white
     display: none
-    position: absolute
     left: 0
+    padding: 0.5em
+    position: absolute
     top: 100%
     z-index: 1
 

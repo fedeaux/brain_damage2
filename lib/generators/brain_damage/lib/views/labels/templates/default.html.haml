@@ -1,6 +1,6 @@
-<% if input.label_guard? %>
+<% if input and input.label_guard? %>
 - if <%= input.label_guard %>
   %label.strong= <%= text %>
-<% elsif input.show_label? %>
+<% elsif !input or input.show_label? %>
 %label.strong= <%= text %>
 <% end %>

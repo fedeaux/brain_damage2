@@ -6,7 +6,7 @@ module BrainDamage
     module Display
       class CollectionList < Base
         def item_class
-          ''
+          false
         end
 
         def display_class

@@ -19,7 +19,7 @@
           %i.trash.icon
 
       = f.fields_for edit_<%= singular_table_name %> do |f|
-        = r "parts/fields", f: f, prefix: edit_line_prefix.gsub('$id', edit_<%= singular_table_name %>.id.to_s), part: edit_<%= singular_table_name %>, nested_on: nested_on
+        = r "<%= plural_table_name %>/fields", f: f, prefix: edit_line_prefix.gsub('$id', edit_<%= singular_table_name %>.id.to_s), <%= singular_table_name %>: edit_<%= singular_table_name %>, nested_on: nested_on
 
   .brain-damage-nested-form-line.brain-damage-nested-form-prototype{ id: prototype_id }
     - unless skip_nested_fields_controls

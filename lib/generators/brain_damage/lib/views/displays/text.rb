@@ -12,14 +12,11 @@ module BrainDamage
         end
 
         def text
-          text = if foreign? then
-                   "#{singular_table_name}.#{@target_method}.#{@display_method}"
-                 else
-                   "#{singular_table_name}.#{@display_method}"
-                 end
-
-          return text if text.present?
-          target
+          if foreign? then
+            "#{singular_table_name}.#{@target_method}.#{@display_method}"
+          else
+            "#{singular_table_name}.#{@display_method}"
+          end
         end
 
         def target

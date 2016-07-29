@@ -9,6 +9,12 @@ module BrainDamage
           super
           @display_method = options[:display_method] || name
           @target_method = options[:target_method] || name
+
+          if options[:act_as_foreign]
+            self.class.send(:define_method, :foreign?) do
+              true
+            end
+          end
         end
 
         def link_text
