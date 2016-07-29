@@ -1,0 +1,31 @@
+- content_for :collecion_list_items, flush: true do
+  - <%= singular_table_name %>.<%= name %>.each_with_index do |item, index|
+    %span{ class: '<%= item_class %>' }
+      = link_to item.<%= options[:display_method] %>, item
+<% if inline_item_divider %>
+      - unless index == <%= singular_table_name %>.<%= name %>.size - 1
+        = <%= inline_item_divider %>
+<% end %>
+
+.brain-damage-collection-list{ class: '<%= display_class %>' }
+  - if <%= singular_table_name %>.<%= name %>.any?
+<% if collapsible? %>
+    - if <%= singular_table_name %>.<%= name %>.count <= 3
+      = yield :collecion_list_items
+
+    - else
+      .collapsible-content
+        .header= "#{<%= singular_table_name %>.<%= name %>.first.<%= options[:display_method] %>} +#{<%= singular_table_name %>.<%= name %>.count-1}"
+        .content
+          - <%= singular_table_name %>.<%= name %>.each_with_index do |item, index|
+            %div{ class: '<%= item_class %>' }
+              = link_to item.<%= options[:display_method] %>, item
+              - unless index == <%= singular_table_name %>.<%= name %>.size - 1
+                <br />
+
+<% else %>
+    = yield :collecion_list_items
+<% end %>
+
+  - else
+    = r 'brain_damage/empty'
