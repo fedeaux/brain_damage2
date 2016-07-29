@@ -1,8 +1,11 @@
 module BrainDamage
   module ViewSchemas
     class SinglePageManager < Base
+      attr_accessor :list_layout
+
       def initialize(resource)
         super
+        @list_layout = :list
         describe_view '_form', { remote: true }
       end
 

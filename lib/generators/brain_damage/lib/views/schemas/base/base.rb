@@ -10,6 +10,7 @@ module BrainDamage
 
         def initialize(resource, options = {})
           set_file_and_template_names(options)
+          @schema = options[:schema]
           super resource, options
         end
 
@@ -61,6 +62,14 @@ module BrainDamage
 
         def self.has_template?(name)
           File.exists? File.join(dir, 'templates', "#{name.to_s.gsub('.html.haml', '')}.html.haml")
+        end
+
+        def method_missing(method, *args, &block)
+          if @schema and @schema.respond_to? method
+            @schema.send method, *args, &block
+          else
+            super
+          end
         end
 
         private

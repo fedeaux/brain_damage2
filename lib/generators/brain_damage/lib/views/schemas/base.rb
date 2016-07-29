@@ -47,8 +47,8 @@ module BrainDamage
         # landing on BrainDamage::View::Base::Base
 
         schema_class = self.class
-
         view_class_name = options[:view_class_name] || name.to_s.split('/').map{ |part| part.gsub('.', '_').camelize }.join('::')
+        options[:schema] = self
 
         loop do
           specific_view_class_name = "BrainDamage::View::#{schema_class.name.demodulize}::#{view_class_name}"

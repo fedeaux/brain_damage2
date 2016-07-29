@@ -10,7 +10,7 @@
 .ui.two.column.grid.brain-damage-single-page-manager{ id: single_page_manager_id }
   .column
     <%= template_hook 'before list.index' %>
-    = r '<%= plural_table_name %>/list/index', <%= plural_table_name %>: @<%= plural_table_name %>
+    = r '<%= plural_table_name %>/<%= list_layout %>/index', <%= plural_table_name %>: @<%= plural_table_name %>
     <%= template_hook 'after list.index' -%>
 
   .column.brain-damage-add-form-wrapper
