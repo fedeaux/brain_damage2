@@ -1,0 +1,7 @@
+- text = if <%= singular_table_name %>.<%= name %>.present? then <%= value %>.html_safe else nil end
+
+- if text.present?
+  %pre.preformatted
+    = text
+- else
+  = r 'brain_damage/empty'
