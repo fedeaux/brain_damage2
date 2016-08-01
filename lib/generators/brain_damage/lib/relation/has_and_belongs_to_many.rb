@@ -14,5 +14,9 @@ module BrainDamage
       line = "has_and_belongs_to_many :#{@options[:field].name}".indent
       add_options_to_line line, @options.slice(:class_name, :join_table)
     end
+
+    def white_list
+      return ":#{@options[:field].name.to_s.singularize}_ids => []"
+    end
   end
 end
