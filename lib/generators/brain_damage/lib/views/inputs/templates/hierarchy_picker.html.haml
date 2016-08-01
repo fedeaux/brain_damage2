@@ -4,7 +4,6 @@
   - local_value = 'null'
 
 - label ||= nil
-- root_id ||= Local::ABSOLUTE_ROOT_ID
 
 .local-input
   - id = bd_id "local-input"
@@ -17,4 +16,4 @@
   = hidden_field_tag(input_name, nil, :id => id)
 
   :javascript
-    new Hierarchy.Input("##{id}", { root_id: #{root_id}, value: #{local_value.to_json} });
+    new Hierarchy.Input("##{id}", { root_id: #{<%= @options[:root_id] %>}, value: #{local_value.to_json} });
