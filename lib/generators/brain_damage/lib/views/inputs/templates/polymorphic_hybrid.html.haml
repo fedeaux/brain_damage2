@@ -1,0 +1,20 @@
+- polymorphic_hybrid_input_id = bd_id 'polymorphic_hybrid_input_id'
+
+.polymorphic-hybrid-input-wrapper{id: polymorphic_hybrid_input_id}
+  .ui.top.attached.tabular.menu.polymorphic-hybrid-input-tabbed-menu
+<% first = true %>
+<% specified_inputs.each do |input| %>
+    .item{ data: {tab: :<%= input[:name] %>}, class: [('active' if <%= first %> )] }= '<%= input[:label] %>'
+<% first = false %>
+<% end %>
+
+<% first = true %>
+<% specified_inputs.each do |input| %>
+  .ui.bottom.attached.tab.segment{ data: {tab: :<%= input[:name] %>}, class: [('active' if <%= first %> )] }
+    = hidden_field_tag('<%= type_select_name %>', '<%= input[:model] %>' )
+<%= input[:input].render.indent 2 %>
+<% first = false %>
+<% end %>
+
+  :coffeescript
+    new BrainDamage.PolymorphicHibridInput "##{polymorphic_hybrid_input_id}"

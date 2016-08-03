@@ -65,7 +65,7 @@ module BrainDamage
         return
       end
 
-      @fields[name] = Field.new(name: name, resource: self)
+      @fields[name] = Field.new(name: name, resource: self) unless @fields[name]
       yield @fields[name] if block_given?
 
       unless @fields[name].relation

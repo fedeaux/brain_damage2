@@ -19,7 +19,16 @@ module BrainDamage
 
       options[:identifier] ||= :default
 
-      indent_or_die @resource.fields[field_name].display(options[:identifier]).render, indentation
+      display = @resource.fields[field_name].display(options[:identifier])
+
+      if display
+        html = display.render
+      else
+        html = ''
+        puts "ERROR: Unable to find a suitable display for #{field_name} (@ #{options[:identifier]})"
+      end
+
+      indent_or_die html, indentation
     end
 
     def label_for(field_name, options = {})
@@ -28,7 +37,11 @@ module BrainDamage
 
       options[:identifier] ||= :default
 
-      indent_or_die @resource.fields[field_name].label(options[:identifier]).render, indentation
+      begin
+        indent_or_die @resource.fields[field_name].label(options[:identifier]).render, indentation
+      rescue
+        puts "ERROR on #{field_name}"
+      end
     end
 
     def display_with_label_for(field_name, options = {})
@@ -39,34 +52,51 @@ module BrainDamage
       indent_or_die inner_html, indentation
     end
 
-    def input_for(field_name, indentation = default_indentation, &block)
-      args = {}
+    def input_for(field_name, options = {})
+      indentation = options[:indentation] || default_indentation
+      options = options.except :indentation
 
-      if block_given?
-        args[:encapsulated_block] = encapsulate_block_in_view_context(&block)
-      end
+      options[:identifier] ||= :default
+
+      # if block_given?
+      #   args[:encapsulated_block] = encapsulate_block_in_view_context(&block)
+      # end
 
       unless @resource.fields[field_name]
         puts "ERROR: can't find field #{field_name}"
         return ''
-      else
-        indent_or_die @resource.fields[field_name].input.render, indentation
       end
+
+      input = @resource.fields[field_name].input(options[:identifier])
+
+      if input
+        html = input.render
+      else
+        html = ''
+        puts "ERROR: Unable to find a suitable input for #{field_name} (@ #{options[:identifier]})"
+      end
+
+      indent_or_die html, indentation
     end
 
-    def input_with_label_for(field_name, indentation = default_indentation)
-      unless @resource.fields[field_name]
-        puts "ERROR: can't find field #{field_name}"
-        return ''
-      else
-        inner_html = [@resource.fields[field_name].label.render, @resource.fields[field_name].input.render].join "\n"
-        indent_or_die inner_html, indentation
-      end
+    def input_with_label_for(field_name, options = {})
+      indentation = options[:indentation] || default_indentation
+      options[:indentation] = 0
+
+      inner_html = [label_for(field_name, options), input_for(field_name, options)].join "\n"
+      indent_or_die inner_html, indentation
     end
 
     def label_text_for(field_name, options = {})
       options[:context] ||= :default
-      @resource.fields[field_name].label(options[:context]).rendered_text
+
+      label = @resource.fields[field_name].label(options[:context])
+      if label
+        label.rendered_text
+      else
+        puts "ERROR: Unable to find a suitable label for #{field_name} (@ #{options[:identifier]})"
+        ''
+      end
     end
 
     def indent_or_die(html, indentation = default_indentation)
