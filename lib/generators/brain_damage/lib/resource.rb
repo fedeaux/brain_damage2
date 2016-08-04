@@ -96,6 +96,10 @@ module BrainDamage
       fields.values.reject(&:inputable?)
     end
 
+    def undisplayable_fields
+      fields.values.reject(&:displayable?)
+    end
+
     def displayable_fields(identifier = :default)
       sort_fields(fields.values.select{ |field|
                     field.displayable? identifier
@@ -124,6 +128,10 @@ module BrainDamage
 
       uninputable_fields.each do |field|
         field.input = :default unless field.input(:default) == false
+      end
+
+      undisplayable_fields.each do |field|
+        field.display = :default unless field.display(:default) == false
       end
 
       @closed_for_field_description = true

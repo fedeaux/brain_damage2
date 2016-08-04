@@ -1,0 +1,5 @@
+.field.label-file-field-wrapper
+  %label.ui.basic.icon.fluid.button
+    %i.file.icon
+    %span.text Escolher Aquivo...
+    = file_field_tag name_for_input_tag(:<%= name %>, prefix), style: "display:none"

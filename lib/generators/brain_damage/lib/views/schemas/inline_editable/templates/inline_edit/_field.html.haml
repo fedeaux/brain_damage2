@@ -20,7 +20,7 @@
 <% end %>
 
   .brain-damage-inline-edit-form.ui.segment
-    = form_for <%= singular_table_name %>, html: { class: 'ui form' }, remote: true, validate: true do |f|
+    = form_for <%= singular_table_name %>, html: { class: 'ui form', multipart: <%= multipart? %> }, remote: <%= remote? %>, validate: true do |f|
 <%= field.input.render.indent 3 %>
 
       %button.ui.small.icon.primary.button{ type: :submit }

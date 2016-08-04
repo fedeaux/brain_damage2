@@ -8,7 +8,7 @@ module BrainDamage
     def list
       if @white_list
         return ":#{@white_list.keys.first} => #{@white_list.values.first.inspect}" if @white_list.is_a? Hash
-        return @white_list.map{ |item| ":#{item}" } if @white_list.is_a? Array
+        return @white_list.map{ |item| ":#{item}" }.join ', ' if @white_list.is_a? Array
         return nil if @white_list == ''
         return ":#{@white_list.to_s}"
       end

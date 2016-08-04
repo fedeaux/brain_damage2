@@ -4,22 +4,23 @@ module BrainDamage
       def initialize(resource)
         @resource = resource
         @views = {}
-
-        resource.displayable_and_inputable_fields.each do |field|
-          describe_view "autocompletable/_simple_selection",
-                        view_class_name: 'Base',
-                        template_name: '_simple_selection.html.haml',
-                        file_name: 'autocompletable/_simple_selection.html.haml'
-
-          describe_view "autocompletable/_multiple_selection",
-                        view_class_name: 'Base',
-                        template_name: '_multiple_selection.html.haml',
-                        file_name: 'autocompletable/_multiple_selection.html.haml'
-
-        end
       end
 
       def ensure_views_descriptions
+        ['_simple_selection', '_multiple_selection', '_links'].each do |name|
+          name = "autocompletable/#{name}"
+          describe_view(name) unless view_described? name
+        end
+      end
+
+      def describe_view(name, options = {})
+        options = {
+          view_class_name: 'Base',
+          template_name: "#{name.split('/').last}.html.haml",
+          file_name: "#{name}.html.haml"
+        }.merge options
+
+        super name, options
       end
 
       private

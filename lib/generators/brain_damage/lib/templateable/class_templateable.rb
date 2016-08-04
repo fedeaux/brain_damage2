@@ -56,8 +56,8 @@ module BrainDamage
         }
 
         if @parser
-          @parser.send("#{visibility}_methods").each do |name, method|
-            definitions[name] = method.print
+          @parser.send("#{visibility}_methods").each do |method_name, method|
+            definitions[method_name] = method.print unless overwrite_method? method_name
           end
         end
 
@@ -74,6 +74,14 @@ module BrainDamage
 
       def class_definition
         @parser.class_definition.definition if @parser
+      end
+
+      def overwrite_method?(method_name)
+        always_overwrite_methods.include? method_name
+      end
+
+      def always_overwrite_methods
+        []
       end
     end
   end

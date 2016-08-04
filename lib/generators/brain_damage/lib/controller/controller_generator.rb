@@ -33,6 +33,10 @@ module BrainDamage
       }.join(', ')
     end
 
+    def always_overwrite_methods
+      [render_erb_string("<%= singular_table_name %>_params").to_sym]
+    end
+
     private
     def dir
       __dir__

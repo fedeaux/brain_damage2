@@ -37,7 +37,7 @@ module BrainDamage
 
       def ensure_views_descriptions
         @views_names.each do |name|
-          describe_view name unless @views.has_key? name
+          describe_view name unless view_described? name
         end
       end
 
@@ -78,6 +78,10 @@ module BrainDamage
             break
           end
         end
+      end
+
+      def view_described? name
+        @views.has_key? name
       end
 
       private

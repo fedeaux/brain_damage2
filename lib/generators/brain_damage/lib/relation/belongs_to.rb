@@ -16,7 +16,13 @@ module BrainDamage
           return @options[:white_list].inspect
         end
       else
-        return ":#{@options[:field].name.to_s}_id"
+        field_name = @options[:field].name.to_s
+
+        unless @options[:polymorphic]
+          return ":#{field_name}_id"
+        else
+          return ":#{field_name}_id, :#{field_name}_type"
+        end
       end
     end
   end

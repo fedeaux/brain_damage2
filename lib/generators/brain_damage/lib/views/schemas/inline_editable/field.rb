@@ -8,6 +8,12 @@ module BrainDamage
           def initialize(resource, options = {})
             @file_name = "inline_edit/_#{options[:field].name}.html.haml"
             @field = options[:field]
+
+            options = {
+              multipart: false,
+              remote: true
+            }.merge options
+
             super
           end
 
@@ -17,6 +23,14 @@ module BrainDamage
 
           def explicit_edit_action?
             false
+          end
+
+          def multipart?
+            @options[:multipart]
+          end
+
+          def remote?
+            @options[:remote]
           end
 
           def guard?
