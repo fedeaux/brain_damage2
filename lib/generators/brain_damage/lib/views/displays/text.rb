@@ -12,10 +12,20 @@ module BrainDamage
         end
 
         def text
-          if foreign? then
+          if foreign?
             "#{singular_table_name}.#{@target_method}.#{@display_method}"
           else
             "#{singular_table_name}.#{@display_method}"
+          end
+        end
+
+        def display_text
+          inner_text = text
+
+          if @options[:filter_method]
+            "#{inner_text}.#{@options[:filter_method]}"
+          else
+            inner_text
           end
         end
 

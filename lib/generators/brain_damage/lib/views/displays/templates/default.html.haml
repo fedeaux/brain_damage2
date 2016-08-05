@@ -1,1 +1,4 @@
-= <%= singular_table_name %>.<%= name %>
+- if <%= singular_table_name %>.<%= name %>.present?
+  = <%= singular_table_name %>.<%= name %>
+- else
+  = r 'brain_damage/empty'
