@@ -14,7 +14,7 @@
 
     .brain-damage-actions-wrapper
       .brain-damage-actions.ui.mini.transparent.icon.buttons
-        - if
+        - if <%= viewable_guard %>
           = link_to <%= singular_table_name %>, class: 'ui button' do
             %i.eye.icon
 

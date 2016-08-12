@@ -7,15 +7,23 @@ module BrainDamage
         attr_reader :file_name
 
         def editable_guard
-          'true'
+          '@single_page_manager_options[:editable]'
         end
 
         def deletable_guard
-          'true'
+          '@single_page_manager_options[:deletable]'
         end
 
         def viewable_guard
           '@single_page_manager_options[:viewable]'
+        end
+
+        def default_single_page_manager_options
+          {
+            editable: true,
+            deletable: true,
+            viewable: false
+          }.inspect
         end
 
         private

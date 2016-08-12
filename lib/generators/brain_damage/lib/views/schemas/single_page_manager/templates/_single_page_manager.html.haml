@@ -1,7 +1,7 @@
 - single_page_manager_id = bd_id 'single-page-manager'
 - <%= plural_table_name %> ||= @<%= plural_table_name %>
 
-- @single_page_manager_options ||= Hash.new(false)
+- @single_page_manager_options ||= <%= default_single_page_manager_options %>
 - @single_page_manager_options[:single_page_manager_script_duplicate_guard] = true
 
 %h1
